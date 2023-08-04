@@ -6,8 +6,8 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "settings_for_weathers")
 data class DbWeatherSetting(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "card_id")
-    val cardId: Int,
+    val cardId: Long = 0,
     val city: String
 )

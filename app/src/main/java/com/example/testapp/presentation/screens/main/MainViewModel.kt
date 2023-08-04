@@ -1,4 +1,4 @@
-package com.example.testapp.presentation.main
+package com.example.testapp.presentation.screens.main
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf

@@ -3,16 +3,17 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+    id 'org.jetbrains.kotlin.android'
 }
 
 android {
     namespace 'com.example.testapp'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.example.testapp"
         minSdk 24
-        targetSdk 33
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
@@ -60,6 +61,7 @@ dependencies {
 
     //Hilt
     implementation 'com.google.dagger:hilt-android:2.47'
+    implementation 'androidx.core:core-ktx:1.10.1'
     kapt 'com.google.dagger:hilt-compiler:2.47'
     implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
 

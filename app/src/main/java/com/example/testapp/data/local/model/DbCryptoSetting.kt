@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "settings_for_cryptos")
 data class DbCryptoSetting(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "card_id")
-    val cardId: Int
+    val cardId: Long
 )

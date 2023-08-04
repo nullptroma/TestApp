@@ -1,4 +1,4 @@
-package com.example.testapp.presentation.main
+package com.example.testapp.presentation.screens.main
 
 import com.example.testapp.domain.EnabledCard
 
