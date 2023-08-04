@@ -1,6 +1,5 @@
 package com.example.testapp.data.local.repositories
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import com.example.testapp.data.local.dao.WeatherDao
@@ -15,8 +14,8 @@ class WeatherSettingsRepository @Inject constructor(private val dao: WeatherDao)
         return dao.getById(id).map { it.firstOrNull()?.let { set -> WeatherSettings(set.city) } }
     }
 
-    fun updateSetting(id: Long, setting: WeatherSettings) {
-        dao.update(DbWeatherSetting(id, setting.city))
+    fun updateSetting(id: Long, setting: WeatherSettings): Boolean {
+        return dao.update(DbWeatherSetting(id, setting.city)) == 1
     }
 
     fun addSetting(setting: WeatherSettings): Long {

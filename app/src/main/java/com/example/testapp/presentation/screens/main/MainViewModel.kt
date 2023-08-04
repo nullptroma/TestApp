@@ -15,6 +15,12 @@ class MainViewModel @Inject constructor() : ViewModel() {
     private val _state = mutableStateOf(MainScreenState())
 
     init {
-        _state.value = _state.value.copy(cards = listOf(EnabledCard(Cards.WEATHER, 0)))
+        _state.value = _state.value.copy(
+            cards = listOf(
+                EnabledCard(Cards.WEATHER, 1),
+                EnabledCard(Cards.WEATHER, 2),
+                EnabledCard(Cards.WEATHER, 3)
+            )
+        )
     }
 }

@@ -12,26 +12,46 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.testapp.data.local.repositories.WeatherSettingsRepository
 import com.example.testapp.di.ViewModelFactoryProvider
 import com.example.testapp.domain.Cards
+import com.example.testapp.domain.usecases.ChangeWeatherCityUseCase
 import com.example.testapp.presentation.cards.CardViewModel
-import com.example.testapp.presentation.screens.main.MainScreenState
+import com.example.testapp.presentation.settings.CitySettingBridge
+import com.example.testapp.presentation.settings.SettingBridge
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.EntryPointAccessors
 
 class WeatherCardViewModel @AssistedInject constructor(
-    private val repo: WeatherSettingsRepository,
-    @Assisted override val id: Long
+    private val _changeCityUseCase: ChangeWeatherCityUseCase,
+    private val _repo: WeatherSettingsRepository,
+    @Assisted id: Long
 ) : CardViewModel() {
     override val cardType: Cards
         get() = Cards.WEATHER
 
+    override val id: Long
+        get() = _id
+    private var _id:Long
+
     val state: State<WeatherCardState>
         get() = _state
     private val _state = mutableStateOf(WeatherCardState())
+    private lateinit var _city:String
 
     init {
-        _state.value = _state.value.copy(city = "Pyatigorsk: $id")
+        Log.d("MyTag", "Create VM")
+        _id = id
+    }
+
+    fun test() {
+        _state.value = _state.value.copy(city="Test!!!")
+    }
+
+    override fun createSettingBridge(): SettingBridge {
+        return CitySettingBridge { city ->
+            Log.d("MyTag", "New city for $id is $city")
+            _state.value = _state.value.copy(city=city)
+        }
     }
 
     @AssistedFactory

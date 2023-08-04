@@ -17,7 +17,7 @@ interface WeatherDao {
     fun add(setting: DbWeatherSetting): Long
 
     @Update
-    fun update(setting: DbWeatherSetting)
+    fun update(setting: DbWeatherSetting) : Int
 
     @Query("DELETE FROM settings_for_weathers WHERE card_id = :id")
     fun deleteById(id: Long)

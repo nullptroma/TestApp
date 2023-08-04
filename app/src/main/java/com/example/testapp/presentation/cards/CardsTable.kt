@@ -10,5 +10,9 @@ object CardsTable {
         Cards.WEATHER to CardView(Route.SELECT_CITY_SCREEN,
             composable = { vm -> WeatherCard(vm) },
             viewModelFactory = { id -> weatherCardViewModel(id) }),
+
+        Cards.CRYPTO to CardView(Route.SELECT_CRYPTOS_SCREEN,
+            composable = { vm -> WeatherCard(vm) },
+            viewModelFactory = { id -> weatherCardViewModel(id) }),
     )
 }
