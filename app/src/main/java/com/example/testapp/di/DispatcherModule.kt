@@ -1,4 +1,4 @@
-package com.codingtroops.restaurantsapp.di
+package com.example.testapp.di
 
 import dagger.Module
 import dagger.Provides

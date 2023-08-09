@@ -3,11 +3,13 @@ package com.example.testapp.data.local.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.testapp.domain.Cards
 
-@Entity(tableName = "settings_for_weathers")
-data class DbWeatherSetting(
-    @PrimaryKey
+@Entity(tableName = "enabled_cards")
+data class DbEnabledCard(
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "card_id")
     val cardId: Long = 0,
-    val city: String
+    val cardType: Cards,
+    val priority: Long
 )

@@ -20,7 +20,7 @@ class SelectCityViewModel @Inject constructor() : ViewModel() {
     }
 
     fun selectCity(city: String) {
-        _bridge.city = city;
+        _bridge.city = city
         _bridge.invokeCallback()
         setExit(true)
     }

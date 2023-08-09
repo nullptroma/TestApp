@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.testapp.data.local.repositories.WeatherSettingsRepository
 import com.example.testapp.di.ViewModelFactoryProvider
-import com.example.testapp.domain.Cards
 import com.example.testapp.domain.usecases.ChangeWeatherCityUseCase
 import com.example.testapp.presentation.cards.CardViewModel
 import com.example.testapp.presentation.settings.CitySettingBridge
@@ -26,8 +25,6 @@ class WeatherCardViewModel @AssistedInject constructor(
     private val _repo: WeatherSettingsRepository,
     @Assisted id: Long
 ) : CardViewModel() {
-    override val cardType: Cards
-        get() = Cards.WEATHER
 
     override val id: Long
         get() = _id
@@ -39,7 +36,6 @@ class WeatherCardViewModel @AssistedInject constructor(
     private lateinit var _city:String
 
     init {
-        Log.d("MyTag", "Create VM")
         _id = id
     }
 

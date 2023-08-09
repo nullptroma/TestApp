@@ -2,25 +2,26 @@ package com.example.testapp.presentation.screens.main
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.example.testapp.domain.Cards
+import com.example.testapp.data.local.repositories.EnabledCardsRepository
+import com.example.testapp.di.IoDispatcher
 import com.example.testapp.domain.EnabledCard
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor() : ViewModel() {
+class MainViewModel @Inject constructor(private val repo: EnabledCardsRepository,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher) : ViewModel() {
     val state: State<MainScreenState>
         get() = _state
     private val _state = mutableStateOf(MainScreenState())
+    private val liveData: LiveData<List<EnabledCard>> = repo.getAll()
 
     init {
-        _state.value = _state.value.copy(
-            cards = listOf(
-                EnabledCard(Cards.WEATHER, 1),
-                EnabledCard(Cards.WEATHER, 2),
-                EnabledCard(Cards.WEATHER, 3)
-            )
-        )
+        liveData.observeForever {
+            _state.value = _state.value.copy(cards = it, loading = false)
+        }
     }
 }
