@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.example.testapp.data.local.TestAppDb
 import com.example.testapp.data.local.dao.EnabledCardsDao
+import com.example.testapp.data.local.dao.MapDao
 import com.example.testapp.data.local.dao.WeatherDao
 import dagger.Module
 import dagger.Provides
@@ -18,6 +19,11 @@ object TestAppModule {
     @Provides
     fun provideWeatherDao(database: TestAppDb): WeatherDao {
         return database.weatherDao
+    }
+
+    @Provides
+    fun provideMapDao(database: TestAppDb): MapDao {
+        return database.mapDao
     }
 
     @Provides

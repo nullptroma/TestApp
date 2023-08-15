@@ -1,7 +1,5 @@
 package com.example.testapp.data.local.repositories
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.map
 import com.example.testapp.data.local.dao.WeatherDao
 import com.example.testapp.data.local.model.DbWeatherSetting
 import com.example.testapp.domain.cardsettings.WeatherSettings
@@ -10,15 +8,14 @@ import javax.inject.Singleton
 
 @Singleton
 class WeatherSettingsRepository @Inject constructor(private val dao: WeatherDao) {
-    fun getById(id: Long): LiveData<WeatherSettings?> {
-        return dao.getById(id).map { it.firstOrNull()?.let { set -> WeatherSettings(set.city) } }
+    fun getById(id: Long): WeatherSettings {
+        val value = dao.getById(id)
+        if(value == null)
+            dao.add(DbWeatherSetting(id))
+        return WeatherSettings(dao.getById(id)!!.city)
     }
 
-    fun updateSetting(id: Long, setting: WeatherSettings): Boolean {
-        return dao.update(DbWeatherSetting(id, setting.city)) == 1
-    }
-
-    fun addSetting(setting: WeatherSettings): Long {
-        return dao.add(DbWeatherSetting(0, setting.city))
+    fun updateSetting(id: Long, setting: WeatherSettings) {
+        dao.update(DbWeatherSetting(id, setting.city))
     }
 }

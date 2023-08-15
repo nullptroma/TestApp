@@ -135,7 +135,7 @@ fun ItemsCard(
 
         ReorderableList(state.list, { from, to ->
             move(from, to)
-        }) {
+        }) { index, it ->
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -149,7 +149,7 @@ fun ItemsCard(
                     }
                 }
             }
-            if (it != state.list.last()) Divider(color = Color.Black, thickness = 0.5.dp)
+            if (index != state.list.size-1) Divider(color = Color.Black, thickness = 0.5.dp)
         }
     }
 }

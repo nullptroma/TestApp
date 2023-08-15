@@ -6,14 +6,14 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
 @Entity(
-    tableName = "settings_for_weathers", foreignKeys = [ForeignKey(
+    tableName = "settings_for_maps", foreignKeys = [ForeignKey(
         entity = DbEnabledCard::class,
         parentColumns = arrayOf("card_id"),
         childColumns = arrayOf("card_id"),
         onDelete = ForeignKey.CASCADE
     )]
 )
-data class DbWeatherSetting(
+data class DbMapSetting(
     @PrimaryKey
     @ColumnInfo(name = "card_id")
     val cardId: Long,

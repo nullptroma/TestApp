@@ -66,22 +66,28 @@ fun MainScreen(
         )
         if (!state.loading) {
             LazyColumn {
-                itemsIndexed(drawableVms) {index, it ->
-                    CardItem(Modifier.padding(5.dp), it, state.cards[index].type, onSetting = onCardSetting)
+                itemsIndexed(drawableVms) { index, it ->
+                    CardItem(
+                        Modifier.padding(5.dp),
+                        it,
+                        state.cards[index].type,
+                        onSetting = onCardSetting
+                    )
                 }
             }
+        } else Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
         }
-        else
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
-            }
 
     }
 }
 
 @Composable
 fun CardItem(
-    modifier: Modifier, drawableVm: DrawableCardViewModel, type: Cards, onSetting: (SettingBridge) -> Unit
+    modifier: Modifier,
+    drawableVm: DrawableCardViewModel,
+    type: Cards,
+    onSetting: (SettingBridge) -> Unit
 ) {
     val vm = drawableVm.viewModel
     Card(

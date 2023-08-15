@@ -28,7 +28,7 @@ fun <T>ReorderableList(
     items: List<T>,
     onMove: (Int, Int) -> Unit,
     modifier: Modifier = Modifier,
-    itemComposable: @Composable (T)->Unit
+    itemComposable: @Composable (Int,T)->Unit
 ) {
     val scope = rememberCoroutineScope()
 
@@ -75,7 +75,7 @@ fun <T>ReorderableList(
                     }
                     .background(Color.White, shape = RoundedCornerShape(4.dp))
                     .fillMaxWidth()
-            ) { itemComposable(item) }
+            ) { itemComposable(index,item) }
         }
     }
 }

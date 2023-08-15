@@ -2,6 +2,8 @@ package com.example.testapp.presentation.cards
 
 import com.example.testapp.domain.Cards
 import com.example.testapp.presentation.Route
+import com.example.testapp.presentation.cards.map.MapCard
+import com.example.testapp.presentation.cards.map.mapCardViewModel
 import com.example.testapp.presentation.cards.weather.WeatherCard
 import com.example.testapp.presentation.cards.weather.weatherCardViewModel
 
@@ -14,7 +16,7 @@ object CardsTable {
             composable = { vm -> WeatherCard(vm) },
             viewModelFactory = { id -> weatherCardViewModel(id) }),
         Cards.MAP to CardView(Route.SELECT_CITY_SCREEN,
-            composable = { vm -> WeatherCard(vm) },
-            viewModelFactory = { id -> weatherCardViewModel(id) })
+            composable = { vm -> MapCard(vm) },
+            viewModelFactory = { id -> mapCardViewModel(id) })
     )
 }

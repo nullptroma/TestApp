@@ -1,5 +1,6 @@
 package com.example.testapp.data.local.repositories
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import com.example.testapp.data.local.dao.EnabledCardsDao
@@ -12,7 +13,7 @@ import javax.inject.Singleton
 @Singleton
 class EnabledCardsRepository @Inject constructor(private val dao: EnabledCardsDao) {
     fun getAll(): LiveData<List<EnabledCard>> {
-        return dao.getAll().map { list->list.map { EnabledCard(it.cardId, it.cardType, it.priority) } }
+        return dao.getAllLive().map { list->list.map { EnabledCard(it.cardId, it.cardType, it.priority) } }
     }
 
     fun createCard(type: Cards, priority:Long=100){
@@ -20,8 +21,14 @@ class EnabledCardsRepository @Inject constructor(private val dao: EnabledCardsDa
     }
 
     fun setAll(list: List<EnabledCard>){
-        dao.deleteAll()
-        dao.addAll(list.map { DbEnabledCard(it.id, it.type, it.priority) })
+        val current = dao.getAll()
+        val remove = current.filter { setting -> list.all { it.id != setting.cardId  } }
+        val add = list.filter { current.all { setting -> it.id != setting.cardId  } }.map { DbEnabledCard(it.id, it.type, it.priority) }
+        val update = list.filter { current.any { setting -> it.id == setting.cardId  } }.map { DbEnabledCard(it.id, it.type, it.priority) }
+        Log.d("MyTag", "${add.size}, ${update.size}, ${remove.size}")
+        dao.deleteAll(remove)
+        dao.addAll(add)
+        dao.updateAll(update)
     }
 
     fun deleteById(id: Long) {

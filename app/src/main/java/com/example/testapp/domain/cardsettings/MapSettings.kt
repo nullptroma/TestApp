@@ -1,6 +1,6 @@
 package com.example.testapp.domain.cardsettings
 
 
-data class WeatherSettings(
+data class MapSettings(
     var city: String = ""
 )

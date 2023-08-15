@@ -1,6 +1,5 @@
 package com.example.testapp.presentation.screens.menusettings
 
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
@@ -36,13 +35,11 @@ class MenuSettingsViewModel @Inject constructor(
     init {
         observer = MyObserver { value ->
             refresh()
-            Log.d("MyTag", "Hello!")
         }
         liveData.observeForever(observer)
     }
 
     fun refresh() {
-        Log.d("MyTag", "Refresh")
         viewModelScope.launch(ioDispatcher) {
             val orig = liveData.value ?: return@launch
             withContext(mainDispatcher) {
