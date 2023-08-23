@@ -26,12 +26,15 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -48,14 +51,12 @@ fun SelectCryptosScreen(vm: SelectCryptosViewModel, onBack: () -> Unit) {
     var search by remember {
         mutableStateOf(false)
     }
-
+    val focusRequester = remember { FocusRequester() }
 
     val state = vm.state.value
     if (state.showToast) {
         Toast.makeText(
-            LocalContext.current,
-            "Вы можете выбрать не более 3 криптовалют",
-            Toast.LENGTH_SHORT
+            LocalContext.current, "Вы можете выбрать не более 3 криптовалют", Toast.LENGTH_SHORT
         ).show()
         vm.showToast(false)
     }
@@ -102,20 +103,23 @@ fun SelectCryptosScreen(vm: SelectCryptosViewModel, onBack: () -> Unit) {
                             }
                         }
                         Box(contentAlignment = Alignment.CenterStart) {
-                            TextField(value = nameFilter, onValueChange = { nameFilter = it })
+                            TextField(modifier = Modifier.focusRequester(focusRequester),
+                                value = nameFilter,
+                                onValueChange = { nameFilter = it })
                         }
                         Box(Modifier.weight(.5f), contentAlignment = Alignment.CenterEnd) {
-                            if (nameFilter.isNotEmpty())
-                                IconButton(onClick = { nameFilter = "" }) {
-                                    Icon(
-                                        Icons.Filled.Clear,
-                                        contentDescription = "Clear",
-                                        tint = Color.White
-                                    )
-                                }
+                            if (nameFilter.isNotEmpty()) IconButton(onClick = { nameFilter = "" }) {
+                                Icon(
+                                    Icons.Filled.Clear,
+                                    contentDescription = "Clear",
+                                    tint = Color.White
+                                )
+                            }
+                        }
+                        LaunchedEffect(Unit) {
+                            focusRequester.requestFocus()
                         }
                     }
-
                 }
             },
             colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = MaterialTheme.colorScheme.primary)
@@ -123,8 +127,7 @@ fun SelectCryptosScreen(vm: SelectCryptosViewModel, onBack: () -> Unit) {
     }, content = { padding ->
         LazyColumn(modifier = Modifier.padding(padding)) {
             itemsIndexed(state.list) { index, it ->
-                if (!it.name.lowercase().contains(lowerCaseName))
-                    return@itemsIndexed
+                if (!it.name.lowercase().contains(lowerCaseName)) return@itemsIndexed
                 Item(it, state.enabledIds.contains(it.id)) {
                     vm.changeIdSelect(it)
                 }
