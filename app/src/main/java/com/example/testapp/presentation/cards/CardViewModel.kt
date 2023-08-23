@@ -1,10 +1,12 @@
 package com.example.testapp.presentation.cards
 
+import androidx.compose.runtime.State
 import androidx.lifecycle.ViewModel
 import com.example.testapp.presentation.settings.SettingBridge
 
-abstract class CardViewModel: ViewModel() {
+abstract class CardViewModel : ViewModel() {
     abstract val id: Long
+    abstract val isSet: State<Boolean>
 
-    abstract fun createSettingBridge() : SettingBridge
+    abstract fun createSettingBridge(): SettingBridge
 }

@@ -13,8 +13,8 @@ interface MapDao {
     fun getById(id: Long): DbMapSetting?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun add(setting: DbMapSetting): Long
+    fun add(setting: DbMapSetting)
 
     @Update
-    fun update(setting: DbMapSetting) : Int
+    fun update(setting: DbMapSetting)
 }

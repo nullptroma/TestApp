@@ -32,6 +32,10 @@ class WeatherCardViewModel @AssistedInject constructor(
     @Assisted id: Long
 ) : CardViewModel() {
 
+    override val isSet: State<Boolean>
+        get() = _isSet
+    private val _isSet = mutableStateOf(false)
+
     override val id: Long
         get() = _id
     private var _id:Long
@@ -55,6 +59,7 @@ class WeatherCardViewModel @AssistedInject constructor(
             _setting = _repo.getById(_id).copy()
             withContext(mainDispatcher) {
                 refreshFromSetting()
+                _isSet.value = _setting.city.isNotEmpty()
             }
         }
     }
@@ -62,7 +67,7 @@ class WeatherCardViewModel @AssistedInject constructor(
     private fun saveSetting() {
         viewModelScope.launch(ioDispatcher) {
             _repo.updateSetting(_id, _setting)
-            refreshFromSetting()
+            loadSetting()
         }
     }
 

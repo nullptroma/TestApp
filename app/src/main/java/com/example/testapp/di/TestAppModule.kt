@@ -3,6 +3,7 @@ package com.codingtroops.restaurantsapp.di
 import android.content.Context
 import androidx.room.Room
 import com.example.testapp.data.local.TestAppDb
+import com.example.testapp.data.local.dao.CryptoDao
 import com.example.testapp.data.local.dao.EnabledCardsDao
 import com.example.testapp.data.local.dao.MapDao
 import com.example.testapp.data.local.dao.WeatherDao
@@ -16,6 +17,11 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object TestAppModule {
+    @Provides
+    fun provideCryptoDao(database: TestAppDb): CryptoDao {
+        return database.cryptoDao
+    }
+
     @Provides
     fun provideWeatherDao(database: TestAppDb): WeatherDao {
         return database.weatherDao
@@ -41,16 +47,5 @@ object TestAppModule {
         ).fallbackToDestructiveMigration().build()
     }
 
-//    @Singleton
-//    @Provides
-//    fun provideRetrofit(): Retrofit {
-//        return Retrofit.Builder().addConverterFactory(GsonConverterFactory.create())
-//            .baseUrl("https://testrestaurants-bc847-default-rtdb.europe-west1.firebasedatabase.app/")
-//            .build()
-//    }
 
-//    @Provides
-//    fun provideRetrofitApi(retrofit: Retrofit): RestaurantsApiService {
-//        return retrofit.create(RestaurantsApiService::class.java)
-//    }
 }

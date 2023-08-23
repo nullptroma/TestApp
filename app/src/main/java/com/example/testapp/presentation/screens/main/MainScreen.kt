@@ -12,22 +12,29 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import com.example.testapp.domain.Cards
+import com.example.testapp.presentation.Route
 import com.example.testapp.presentation.cards.DrawableCardViewModel
 import com.example.testapp.presentation.settings.SettingBridge
 
@@ -36,10 +43,10 @@ import com.example.testapp.presentation.settings.SettingBridge
 fun MainScreen(
     state: MainScreenState,
     drawableVms: List<DrawableCardViewModel>,
-    onCardSetting: (SettingBridge) -> Unit,
+    onCardSetting: (SettingBridge, Route) -> Unit,
     onSetting: () -> Unit
 ) {
-    Column {
+    Column(modifier = Modifier.fillMaxSize()) {
         CenterAlignedTopAppBar(
             title = {
                 Row(
@@ -65,13 +72,13 @@ fun MainScreen(
             colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = MaterialTheme.colorScheme.primary)
         )
         if (!state.loading) {
-            LazyColumn {
+            LazyColumn(modifier = Modifier.fillMaxSize()) {
                 itemsIndexed(drawableVms) { index, it ->
                     CardItem(
                         Modifier.padding(5.dp),
                         it,
                         state.cards[index].type,
-                        onSetting = onCardSetting
+                        onSetting = { bridge -> onCardSetting(bridge, it.settingRoute) }
                     )
                 }
             }
@@ -101,22 +108,29 @@ fun CardItem(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = type.text, Modifier.padding(5.dp))
-                Button(modifier = Modifier
-                    .padding(5.dp)
-                    .height(20.dp), onClick = {
-                    onSetting(vm.createSettingBridge())
-                }) {
-                    Text(text = "...")
+                Text(text = type.text, Modifier.padding(start=6.dp))
+                IconButton(onClick = { onSetting(vm.createSettingBridge()) }) {
+                    Icon(Icons.Filled.Settings, contentDescription = "Settings", tint = MaterialTheme.colorScheme.primary)
                 }
             }
+            Divider(color = Color.LightGray, thickness = 1.dp)
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(12.dp),
+                    .padding(4.dp),
                 contentAlignment = Alignment.Center
             ) {
-                drawableVm.Draw()
+                if(vm.isSet.value)
+                    drawableVm.Draw()
+                else
+                    Box(
+                        Modifier
+                            .fillMaxSize()
+                            .height(180.dp), contentAlignment = Alignment.Center) {
+                        Button(onClick = { onSetting(vm.createSettingBridge()) }) {
+                            Text(text = "Выбрать")
+                        }
+                    }
             }
         }
     }

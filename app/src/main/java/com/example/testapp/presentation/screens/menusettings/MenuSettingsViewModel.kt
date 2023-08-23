@@ -69,19 +69,19 @@ class MenuSettingsViewModel @Inject constructor(
         mutableList[from] = mutableList[to]
         mutableList[to] = buf
 
-        _state.value = _state.value.copy(list = mutableList.toMutableList()) // работает
+        _state.value = _state.value.copy(list = mutableList.toMutableList())
     }
 
     fun createCard(type: Cards) {
         mutableList.add(EnabledCard(0, type, 100))
-        _state.value = _state.value.copy(list = mutableList.toMutableList()) // работает
+        _state.value = _state.value.copy(list = mutableList.toMutableList())
     }
 
     fun removeCard(id: Long) {
         mutableList.removeIf {
             it.id == id
         }
-        _state.value = _state.value.copy(list = mutableList.toMutableList()) // работает
+        _state.value = _state.value.copy(list = mutableList.toMutableList())
     }
 
     override fun onCleared() {

@@ -13,8 +13,8 @@ interface WeatherDao {
     fun getById(id: Long): DbWeatherSetting?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun add(setting: DbWeatherSetting): Long
+    fun add(setting: DbWeatherSetting)
 
     @Update
-    fun update(setting: DbWeatherSetting) : Int
+    fun update(setting: DbWeatherSetting)
 }
