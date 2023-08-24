@@ -1,3 +1,5 @@
 package com.example.testapp.presentation.cards.weather
 
-data class WeatherCardState(val city: String = "")
+import com.example.testapp.domain.CityInfo
+
+data class WeatherCardState(val city: CityInfo = CityInfo())

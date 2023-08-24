@@ -1,7 +1,6 @@
 package com.example.testapp.presentation.cards.crypto
 
 import android.app.Activity
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -62,7 +61,6 @@ class CryptoCardViewModel @AssistedInject constructor(
     }
 
     private fun refreshState() {
-        Log.d("MyTag", "Updated")
         val pack = _cryptosInfo ?: return
         _state.value = CryptoCardState(
             info = pack.data.filter { _setting.cryptoIdList.contains(it.id) },

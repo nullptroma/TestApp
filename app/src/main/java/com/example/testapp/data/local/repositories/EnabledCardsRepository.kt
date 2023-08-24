@@ -25,7 +25,6 @@ class EnabledCardsRepository @Inject constructor(private val dao: EnabledCardsDa
         val remove = current.filter { setting -> list.all { it.id != setting.cardId  } }
         val add = list.filter { current.all { setting -> it.id != setting.cardId  } }.map { DbEnabledCard(it.id, it.type, it.priority) }
         val update = list.filter { current.any { setting -> it.id == setting.cardId  } }.map { DbEnabledCard(it.id, it.type, it.priority) }
-        Log.d("MyTag", "${add.size}, ${update.size}, ${remove.size}")
         dao.deleteAll(remove)
         dao.addAll(add)
         dao.updateAll(update)

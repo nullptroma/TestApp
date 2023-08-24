@@ -17,5 +17,6 @@ data class DbWeatherSetting(
     @PrimaryKey
     @ColumnInfo(name = "card_id")
     val cardId: Long,
-    val city: String = ""
+    @ColumnInfo(name = "city_id")
+    val cityId: Long = 0
 )

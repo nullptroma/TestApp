@@ -12,6 +12,6 @@ fun WeatherCard(vm : ViewModel?) {
     val state = vm.state.value
 
     Column {
-        Text(text = state.city)
+        Text(text = state.toString())
     }
 }

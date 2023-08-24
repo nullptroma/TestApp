@@ -1,4 +1,4 @@
-package com.example.testapp.presentation.screens.selectcryptos
+package com.example.testapp.presentation.screens.select_cryptos
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf

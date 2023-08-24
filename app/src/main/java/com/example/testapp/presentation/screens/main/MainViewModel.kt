@@ -6,15 +6,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.testapp.MyObserver
 import com.example.testapp.data.local.repositories.EnabledCardsRepository
-import com.example.testapp.di.IoDispatcher
 import com.example.testapp.domain.EnabledCard
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val repo: EnabledCardsRepository,
+    repo: EnabledCardsRepository,
 ) : ViewModel() {
     val state: State<MainScreenState>
         get() = _state

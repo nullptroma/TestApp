@@ -1,4 +1,4 @@
-package com.example.testapp.presentation.screens.menusettings
+package com.example.testapp.presentation.screens.menu_settings
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -79,34 +79,35 @@ fun MenuSettings(vm: MenuSettingsViewModel, onBack: () -> Unit) {
         }
     }
 
-    Scaffold(
-        topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                    ) {
-                        Spacer(modifier = Modifier.weight(.5f))
-                        Text(text = "Главный экран", color = MaterialTheme.colorScheme.onPrimary)
-                        Box(Modifier.weight(.5f), contentAlignment = Alignment.CenterEnd) {
-                            ClickableText(
-                                modifier = Modifier.padding(end = 8.dp),
-                                text = AnnotatedString("Готово"),
-                                onClick = { onBack() },
-                                style = TextStyle(
-                                    color = MaterialTheme.colorScheme.onPrimary
-                                )
+    Scaffold(topBar = {
+        CenterAlignedTopAppBar(
+            title = {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    Spacer(modifier = Modifier.weight(.5f))
+                    Text(text = "Главный экран", color = MaterialTheme.colorScheme.onPrimary)
+                    Box(Modifier.weight(.5f), contentAlignment = Alignment.CenterEnd) {
+                        ClickableText(
+                            modifier = Modifier.padding(end = 8.dp),
+                            text = AnnotatedString("Готово"),
+                            onClick = {
+                                vm.save()
+                                onBack()
+                            },
+                            style = TextStyle(
+                                color = MaterialTheme.colorScheme.onPrimary
                             )
-                        }
-
+                        )
                     }
-                },
-                colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = MaterialTheme.colorScheme.primary)
-            )
-        },
-        content = {
+
+                }
+            },
+            colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = MaterialTheme.colorScheme.primary)
+        )
+    }, content = {
         ItemsCard(Modifier.padding(it),
             state,
             move = { from, to -> vm.move(from, to) },
@@ -149,7 +150,7 @@ fun ItemsCard(
                     }
                 }
             }
-            if (index != state.list.size-1) Divider(color = Color.Black, thickness = 0.5.dp)
+            if (index != state.list.size - 1) Divider(color = Color.Black, thickness = 0.5.dp)
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.example.testapp.presentation.screens.menusettings
+package com.example.testapp.presentation.screens.menu_settings
 
 import androidx.compose.runtime.Immutable
 import com.example.testapp.domain.EnabledCard

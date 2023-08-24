@@ -20,17 +20,16 @@ import com.example.testapp.presentation.cards.CardsTable
 import com.example.testapp.presentation.cards.DrawableCardViewModel
 import com.example.testapp.presentation.screens.main.MainScreen
 import com.example.testapp.presentation.screens.main.MainViewModel
-import com.example.testapp.presentation.screens.menusettings.MenuSettings
-import com.example.testapp.presentation.screens.menusettings.MenuSettingsViewModel
-import com.example.testapp.presentation.screens.selectcity.SelectCityScreen
-import com.example.testapp.presentation.screens.selectcity.SelectCityViewModel
-import com.example.testapp.presentation.screens.selectcryptos.SelectCryptosScreen
-import com.example.testapp.presentation.screens.selectcryptos.SelectCryptosViewModel
+import com.example.testapp.presentation.screens.menu_settings.MenuSettingsViewModel
+import com.example.testapp.presentation.screens.select_city.SelectCityScreen
+import com.example.testapp.presentation.screens.select_city.SelectCityViewModel
+import com.example.testapp.presentation.screens.select_cryptos.SelectCryptosScreen
+import com.example.testapp.presentation.screens.select_cryptos.SelectCryptosViewModel
 import com.example.testapp.presentation.settings.CitySettingBridge
 import com.example.testapp.presentation.settings.CryptosSettingBridge
-import com.example.testapp.presentation.settings.SettingBridge
 import com.example.testapp.ui.theme.TestAppTheme
 import dagger.hilt.android.AndroidEntryPoint
+import com.example.testapp.presentation.screens.menu_settings.MenuSettings as MenuSettings1
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -52,7 +51,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun TestApp() {
     val navController = rememberNavController()
-    var curSettingBridge: SettingBridge? = null
 
     val mainViewModel: MainViewModel = hiltViewModel()
     val mainScreenState = mainViewModel.state.value
@@ -65,7 +63,8 @@ fun TestApp() {
     NavHost(navController, startDestination = Route.MAIN_SCREEN.path) {
         composable(route = Route.MAIN_SCREEN.path) {
             MainScreen(mainScreenState, vms, onCardSetting = { bridge, route ->
-                curSettingBridge = bridge
+                if(navController.currentBackStackEntry?.destination?.route != Route.MAIN_SCREEN.path)
+                    return@MainScreen
                 if (route == Route.SELECT_CITY_SCREEN && bridge is CitySettingBridge) {
                     selectCityViewModel.setBridge(bridge)
                     navController.navigate(route.path)
@@ -81,16 +80,15 @@ fun TestApp() {
         composable(
             route = Route.SELECT_CITY_SCREEN.path
         ) {
-            SelectCityScreen(selectCityViewModel, onExit = {
+            SelectCityScreen(vm = selectCityViewModel) {
                 navController.navigateUp()
-            })
+            }
         }
 
         composable(
             route = Route.SELECT_CRYPTOS_SCREEN.path
         ) {
-            SelectCryptosScreen(cryptosSettingsViewModel) {
-                cryptosSettingsViewModel.save()
+            SelectCryptosScreen(vm = cryptosSettingsViewModel) {
                 navController.navigateUp()
             }
         }
@@ -98,8 +96,7 @@ fun TestApp() {
         composable(
             route = Route.MAIN_MENU_SETTINGS.path
         ) {
-            MenuSettings(menuSettingsViewModel) {
-                menuSettingsViewModel.save()
+            MenuSettings1(vm = menuSettingsViewModel) {
                 navController.navigateUp()
             }
         }

@@ -13,6 +13,7 @@ import com.example.testapp.data.local.repositories.MapSettingsRepository
 import com.example.testapp.di.IoDispatcher
 import com.example.testapp.di.MainDispatcher
 import com.example.testapp.di.ViewModelFactoryProvider
+import com.example.testapp.domain.CityInfo
 import com.example.testapp.domain.cardsettings.MapSettings
 import com.example.testapp.presentation.cards.CardViewModel
 import com.example.testapp.presentation.settings.CitySettingBridge
@@ -51,7 +52,7 @@ class MapCardViewModel @AssistedInject constructor(
     }
 
     private fun refreshFromSetting() {
-        _state.value = _state.value.copy(city = _setting.city)
+        _state.value = _state.value.copy(city = _setting.cityInfo.name)
     }
 
     private fun loadSetting() {
@@ -59,7 +60,7 @@ class MapCardViewModel @AssistedInject constructor(
             _setting = _repo.getById(_id).copy()
             withContext(mainDispatcher) {
                 refreshFromSetting()
-                _isSet.value = _setting.city.isNotEmpty()
+                _isSet.value = _setting.cityInfo.name.isNotEmpty()
             }
         }
     }
@@ -71,8 +72,8 @@ class MapCardViewModel @AssistedInject constructor(
         }
     }
 
-    private fun setCity(city:String) {
-        _setting.city = city
+    private fun setCity(city: CityInfo) {
+        _setting.cityInfo = city
         saveSetting()
     }
 

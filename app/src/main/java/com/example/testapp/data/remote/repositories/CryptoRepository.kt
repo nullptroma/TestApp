@@ -1,6 +1,5 @@
 package com.example.testapp.data.remote.repositories
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.testapp.data.remote.api.CoingeckoApiV3
@@ -72,7 +71,6 @@ class CryptoRepository @Inject constructor(
             }
 
             withContext(mainDispatcher) {
-                Log.d("MyTag", "Refreshed")
                 _liveData.value = CryptosPackage(
                     data = value, loading = false, error = error
                 )

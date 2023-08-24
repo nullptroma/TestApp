@@ -1,12 +1,12 @@
-package com.example.testapp.presentation.screens.selectcryptos
+package com.example.testapp.presentation.screens.select_city
 
-import android.widget.Toast
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
@@ -15,7 +15,6 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -36,14 +35,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
-import com.example.testapp.domain.CryptoData
+import androidx.compose.ui.unit.sp
+import com.example.testapp.domain.CityInfo
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SelectCryptosScreen(vm: SelectCryptosViewModel, onBack: () -> Unit) {
+fun SelectCityScreen(vm: SelectCityViewModel, onBack: () -> Unit) {
+    val state: SelectCityScreenState = vm.state.value
+    if (state.exit) {
+        vm.restoreExit()
+        onBack()
+    }
+
     var nameFilter by remember {
         mutableStateOf("")
     }
@@ -53,13 +57,6 @@ fun SelectCryptosScreen(vm: SelectCryptosViewModel, onBack: () -> Unit) {
     }
     val focusRequester = remember { FocusRequester() }
 
-    val state = vm.state.value
-    if (state.showToast) {
-        Toast.makeText(
-            LocalContext.current, "Вы можете выбрать не более 3 криптовалют", Toast.LENGTH_SHORT
-        ).show()
-        vm.showToast(false)
-    }
     Scaffold(topBar = {
         CenterAlignedTopAppBar(
             title = {
@@ -70,7 +67,9 @@ fun SelectCryptosScreen(vm: SelectCryptosViewModel, onBack: () -> Unit) {
                 ) {
                     if (!search) {
                         Box(Modifier.weight(.5f), contentAlignment = Alignment.CenterStart) {
-                            IconButton(onClick = { onBack() }) {
+                            IconButton(onClick = {
+                                onBack()
+                            }) {
                                 Icon(
                                     imageVector = Icons.Filled.ArrowBack,
                                     contentDescription = "Back",
@@ -79,7 +78,7 @@ fun SelectCryptosScreen(vm: SelectCryptosViewModel, onBack: () -> Unit) {
                             }
                         }
                         Text(
-                            text = "Выбор криптовалюты", color = MaterialTheme.colorScheme.onPrimary
+                            text = "Выбор города", color = MaterialTheme.colorScheme.onPrimary
                         )
                         Box(Modifier.weight(.5f), contentAlignment = Alignment.CenterEnd) {
                             IconButton(onClick = {
@@ -94,7 +93,10 @@ fun SelectCryptosScreen(vm: SelectCryptosViewModel, onBack: () -> Unit) {
                         }
                     } else {
                         Box(Modifier.weight(.5f), contentAlignment = Alignment.CenterStart) {
-                            IconButton(onClick = { search = false }) {
+                            IconButton(onClick = {
+                                search = false
+                                nameFilter = ""
+                            }) {
                                 Icon(
                                     imageVector = Icons.Filled.Close,
                                     contentDescription = "Back",
@@ -126,13 +128,13 @@ fun SelectCryptosScreen(vm: SelectCryptosViewModel, onBack: () -> Unit) {
         )
     }, content = { padding ->
         LazyColumn(modifier = Modifier.padding(padding)) {
-            itemsIndexed(state.list) { index, it ->
+            itemsIndexed(state.cities) { index, it ->
                 if (!it.name.lowercase().contains(lowerCaseName)) return@itemsIndexed
-                Item(it, state.enabledIds.contains(it.id)) {
-                    vm.changeIdSelect(it)
+                Item(it) {
+                    vm.selectCity(it)
                 }
-                if (index != state.list.size - 1) Divider(
-                    color = Color.Gray, thickness = 0.5.dp
+                Divider(
+                    color = Color.LightGray, thickness = 1.dp
                 )
             }
         }
@@ -140,22 +142,20 @@ fun SelectCryptosScreen(vm: SelectCryptosViewModel, onBack: () -> Unit) {
 }
 
 @Composable
-fun Item(item: CryptoData, enabled: Boolean, onChange: (String) -> Unit) {
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .padding(4.dp)
-            .fillMaxWidth()
-    ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            AsyncImage(
-                model = item.imageUrl, contentDescription = "icon", modifier = Modifier.size(64.dp)
-            )
-            Text(text = item.name, modifier = Modifier.padding(start = 4.dp))
+fun Item(item: CityInfo, onClick: () -> Unit) {
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .clickable {
+            onClick()
+        }) {
+        Row(
+            Modifier.padding(8.dp), horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Box(Modifier.width(64.dp)) {
+                Text(text = item.country, fontSize = 30.sp, color = Color.DarkGray)
+            }
+            Text(text = item.name, fontSize = 30.sp, color = Color.DarkGray)
         }
-        Checkbox(modifier = Modifier.padding(end = 8.dp), checked = enabled, onCheckedChange = {
-            onChange(item.id)
-        })
     }
 }
