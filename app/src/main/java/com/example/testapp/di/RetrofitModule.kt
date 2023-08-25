@@ -12,10 +12,6 @@ import javax.inject.Qualifier
 import javax.inject.Singleton
 
 
-//@Qualifier
-//@Retention(AnnotationRetention.BINARY)
-//annotation class MainDispatcher
-
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 annotation class CoingeckoRetrofit

@@ -13,7 +13,7 @@ import com.example.testapp.data.local.repositories.MapSettingsRepository
 import com.example.testapp.di.IoDispatcher
 import com.example.testapp.di.MainDispatcher
 import com.example.testapp.di.ViewModelFactoryProvider
-import com.example.testapp.domain.CityInfo
+import com.example.testapp.domain.models.CityInfo
 import com.example.testapp.domain.cardsettings.MapSettings
 import com.example.testapp.presentation.cards.CardViewModel
 import com.example.testapp.presentation.settings.CitySettingBridge

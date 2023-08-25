@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.testapp.MyObserver
 import com.example.testapp.data.local.repositories.EnabledCardsRepository
-import com.example.testapp.domain.EnabledCard
+import com.example.testapp.domain.models.EnabledCard
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

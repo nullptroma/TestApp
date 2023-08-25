@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.testapp.MyObserver
 import com.example.testapp.data.local.repositories.CitiesRepository
-import com.example.testapp.domain.CityInfo
+import com.example.testapp.domain.models.CityInfo
 import com.example.testapp.presentation.settings.CitySettingBridge
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

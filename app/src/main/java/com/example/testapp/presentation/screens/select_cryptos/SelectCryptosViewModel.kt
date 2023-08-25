@@ -5,8 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.testapp.MyObserver
 import com.example.testapp.data.remote.repositories.CryptoRepository
-import com.example.testapp.domain.CryptoData
-import com.example.testapp.domain.CryptosPackage
+import com.example.testapp.domain.models.CryptoData
+import com.example.testapp.domain.models.CryptosPackage
 import com.example.testapp.presentation.settings.CryptosSettingBridge
 import dagger.hilt.android.lifecycle.HiltViewModel
 import okhttp3.internal.toImmutableList

@@ -3,7 +3,7 @@ package com.example.testapp.data.local.repositories
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import com.example.testapp.data.local.dao.CitiesDao
-import com.example.testapp.domain.CityInfo
+import com.example.testapp.domain.models.CityInfo
 import javax.inject.Inject
 import javax.inject.Singleton
 

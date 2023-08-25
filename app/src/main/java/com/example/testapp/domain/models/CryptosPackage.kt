@@ -1,4 +1,4 @@
-package com.example.testapp.domain
+package com.example.testapp.domain.models
 
 data class CryptosPackage(
     val data: List<CryptoData> = listOf(),

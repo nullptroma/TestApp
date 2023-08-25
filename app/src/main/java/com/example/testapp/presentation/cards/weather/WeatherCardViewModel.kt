@@ -14,8 +14,8 @@ import com.example.testapp.data.remote.repositories.WeatherRepository
 import com.example.testapp.di.IoDispatcher
 import com.example.testapp.di.MainDispatcher
 import com.example.testapp.di.ViewModelFactoryProvider
-import com.example.testapp.domain.CityInfo
 import com.example.testapp.domain.cardsettings.WeatherSettings
+import com.example.testapp.domain.models.CityInfo
 import com.example.testapp.presentation.cards.CardViewModel
 import com.example.testapp.presentation.settings.CitySettingBridge
 import com.example.testapp.presentation.settings.SettingBridge
@@ -54,12 +54,17 @@ class WeatherCardViewModel @AssistedInject constructor(
     }
 
     private fun refreshFromSetting() {
-        _state.value = _state.value.copy(city = _setting.cityInfo)
         _isSet.value = _setting.cityInfo.name.isNotEmpty()
+
         if (_isSet.value) {
-            viewModelScope.launch {
-                _dataRepo.get(_setting.cityInfo.coordinates)
-            }
+            fetchData()
+        }
+    }
+
+    fun fetchData() {
+        viewModelScope.launch {
+            var info = _dataRepo.get(_setting.cityInfo.coordinates)?.copy(city = _setting.cityInfo.name)
+            _state.value = WeatherCardState(data = info)
         }
     }
 

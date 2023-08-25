@@ -1,6 +1,6 @@
 package com.example.testapp.domain.cardsettings
 
-import com.example.testapp.domain.CityInfo
+import com.example.testapp.domain.models.CityInfo
 
 
 data class WeatherSettings(

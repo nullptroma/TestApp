@@ -1,5 +1,5 @@
 package com.example.testapp.presentation.cards.weather
 
-import com.example.testapp.domain.CityInfo
+import com.example.testapp.domain.models.Weather
 
-data class WeatherCardState(val city: CityInfo = CityInfo())
+data class WeatherCardState(val data: Weather? = null)

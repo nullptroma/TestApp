@@ -1,6 +1,6 @@
 package com.example.testapp.presentation.cards.crypto
 
-import com.example.testapp.domain.CryptoData
+import com.example.testapp.domain.models.CryptoData
 
 data class CryptoCardState(
     val info: List<CryptoData> = listOf(),

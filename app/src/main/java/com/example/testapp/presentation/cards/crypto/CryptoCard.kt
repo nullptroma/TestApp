@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import coil.compose.AsyncImage
 import com.example.testapp.R
-import com.example.testapp.domain.CryptoData
+import com.example.testapp.domain.models.CryptoData
 
 @Composable
 fun CryptoCard(vm: ViewModel?) {

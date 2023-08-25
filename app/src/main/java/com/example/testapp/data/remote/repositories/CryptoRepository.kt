@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import com.example.testapp.data.remote.api.CoingeckoApiV3
 import com.example.testapp.di.IoDispatcher
 import com.example.testapp.di.MainDispatcher
-import com.example.testapp.domain.CryptoData
-import com.example.testapp.domain.CryptosPackage
+import com.example.testapp.domain.models.CryptoData
+import com.example.testapp.domain.models.CryptosPackage
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay

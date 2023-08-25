@@ -1,12 +1,11 @@
 package com.example.testapp.data.local.repositories
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import com.example.testapp.data.local.dao.EnabledCardsDao
 import com.example.testapp.data.local.model.DbEnabledCard
-import com.example.testapp.domain.Cards
-import com.example.testapp.domain.EnabledCard
+import com.example.testapp.domain.CardType
+import com.example.testapp.domain.models.EnabledCard
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -16,7 +15,7 @@ class EnabledCardsRepository @Inject constructor(private val dao: EnabledCardsDa
         return dao.getAllLive().map { list->list.map { EnabledCard(it.cardId, it.cardType, it.priority) } }
     }
 
-    fun createCard(type: Cards, priority:Long=100){
+    fun createCard(type: CardType, priority:Long=100){
         dao.add(DbEnabledCard(0, type, priority))
     }
 

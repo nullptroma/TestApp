@@ -10,8 +10,8 @@ import com.example.testapp.MyObserver
 import com.example.testapp.data.local.repositories.EnabledCardsRepository
 import com.example.testapp.di.IoDispatcher
 import com.example.testapp.di.MainDispatcher
-import com.example.testapp.domain.Cards
-import com.example.testapp.domain.EnabledCard
+import com.example.testapp.domain.CardType
+import com.example.testapp.domain.models.EnabledCard
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
@@ -72,7 +72,7 @@ class MenuSettingsViewModel @Inject constructor(
         _state.value = _state.value.copy(list = mutableList.toMutableList())
     }
 
-    fun createCard(type: Cards) {
+    fun createCard(type: CardType) {
         mutableList.add(EnabledCard(0, type, 100))
         _state.value = _state.value.copy(list = mutableList.toMutableList())
     }

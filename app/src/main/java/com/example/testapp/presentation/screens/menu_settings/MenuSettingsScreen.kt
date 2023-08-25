@@ -39,7 +39,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.example.testapp.domain.Cards
+import com.example.testapp.domain.CardType
 import com.example.testapp.presentation.drag.ReorderableList
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -63,7 +63,7 @@ fun MenuSettings(vm: MenuSettingsViewModel, onBack: () -> Unit) {
                     Text(text = "Выберите тип карточки:")
                     Spacer(Modifier)
                     LazyColumn {
-                        items(Cards.values()) {
+                        items(CardType.values()) {
                             Row(modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable {

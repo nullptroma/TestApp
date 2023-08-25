@@ -37,7 +37,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.testapp.domain.CityInfo
+import com.example.testapp.domain.models.CityInfo
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

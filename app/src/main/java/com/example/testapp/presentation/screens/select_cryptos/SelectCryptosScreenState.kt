@@ -1,6 +1,6 @@
 package com.example.testapp.presentation.screens.select_cryptos
 
-import com.example.testapp.domain.CryptoData
+import com.example.testapp.domain.models.CryptoData
 
 data class SelectCryptosScreenState(
     val list: List<CryptoData> = listOf(),

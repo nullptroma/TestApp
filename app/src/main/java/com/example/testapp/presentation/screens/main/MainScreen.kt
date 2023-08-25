@@ -33,7 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import com.example.testapp.domain.Cards
+import com.example.testapp.domain.CardType
 import com.example.testapp.presentation.Route
 import com.example.testapp.presentation.cards.DrawableCardViewModel
 import com.example.testapp.presentation.settings.SettingBridge
@@ -93,7 +93,7 @@ fun MainScreen(
 fun CardItem(
     modifier: Modifier,
     drawableVm: DrawableCardViewModel,
-    type: Cards,
+    type: CardType,
     onSetting: (SettingBridge) -> Unit
 ) {
     val vm = drawableVm.viewModel

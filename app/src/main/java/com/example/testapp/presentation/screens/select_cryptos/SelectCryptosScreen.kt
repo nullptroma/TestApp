@@ -39,7 +39,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.example.testapp.domain.CryptoData
+import com.example.testapp.domain.models.CryptoData
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

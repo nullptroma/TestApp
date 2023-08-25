@@ -15,7 +15,7 @@ import com.example.testapp.data.remote.repositories.CryptoRepository
 import com.example.testapp.di.IoDispatcher
 import com.example.testapp.di.MainDispatcher
 import com.example.testapp.di.ViewModelFactoryProvider
-import com.example.testapp.domain.CryptosPackage
+import com.example.testapp.domain.models.CryptosPackage
 import com.example.testapp.domain.cardsettings.CryptoSetting
 import com.example.testapp.presentation.cards.CardViewModel
 import com.example.testapp.presentation.settings.CryptosSettingBridge
