@@ -24,6 +24,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -47,6 +48,7 @@ class WeatherCardViewModel @AssistedInject constructor(
         get() = _state
     private val _state = mutableStateOf(WeatherCardState())
     private var _setting: WeatherSettings = WeatherSettings()
+    private var _loading = false
 
     init {
         _id = id
@@ -62,10 +64,19 @@ class WeatherCardViewModel @AssistedInject constructor(
     }
 
     fun fetchData() {
+        if (_loading) return
+        _loading = true
         viewModelScope.launch {
-            var info = _dataRepo.get(_setting.cityInfo.coordinates)?.copy(city = _setting.cityInfo.name)
-            _state.value = WeatherCardState(data = info)
+            _state.value = _state.value.copy(data = null)
+            while (_isSet.value) {
+                val info = _dataRepo.get(_setting.cityInfo.coordinates)
+                    ?.copy(city = _setting.cityInfo.name)
+                _state.value = WeatherCardState(data = info)
+                if (info != null) break
+                delay(1000)
+            }
         }
+        _loading = false
     }
 
     private fun loadSetting() {
@@ -103,8 +114,7 @@ class WeatherCardViewModel @AssistedInject constructor(
     companion object {
         @Suppress("UNCHECKED_CAST")
         fun provideFactory(
-            assistedFactory: Factory,
-            id: Long
+            assistedFactory: Factory, id: Long
         ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 return assistedFactory.create(id) as T

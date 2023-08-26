@@ -14,17 +14,16 @@ import javax.inject.Singleton
 class WeatherRepository @Inject constructor(
     private val api: OpenWeatherApi, @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
-    private var _loading = false
 
     suspend fun get(pos: Coordinates): Weather? {
-        if (_loading)
-            return null
-        _loading = true
         var res: RemoteWeather
-        withContext(ioDispatcher) {
-            res = api.getWeather(pos.latitude, pos.longitude)
+        try{
+            withContext(ioDispatcher) {
+                res = api.getWeather(pos.latitude, pos.longitude)
+            }
+        }catch (e:Exception) {
+            return null
         }
-        _loading = false
         return Weather(
             res.name,
             res.weather[0].icon,
