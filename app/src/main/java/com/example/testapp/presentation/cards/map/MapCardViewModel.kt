@@ -9,12 +9,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.testapp.data.local.repositories.MapSettingsRepository
-import com.example.testapp.di.IoDispatcher
-import com.example.testapp.di.MainDispatcher
 import com.example.testapp.di.ViewModelFactoryProvider
 import com.example.testapp.domain.models.CityInfo
 import com.example.testapp.domain.models.cardsettings.MapSettings
+import com.example.testapp.domain.usecases.get_settings.UseCardSettingsUseCase
 import com.example.testapp.presentation.cards.CardViewModel
 import com.example.testapp.presentation.settings.CitySettingBridge
 import com.example.testapp.presentation.settings.SettingBridge
@@ -22,14 +20,10 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.EntryPointAccessors
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class MapCardViewModel @AssistedInject constructor(
-    private val _repo: MapSettingsRepository,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
-    @MainDispatcher private val mainDispatcher: CoroutineDispatcher,
+    private val _useMapSettingsUseCase: UseCardSettingsUseCase<MapSettings>,
     @Assisted id: Long
 ) : CardViewModel() {
 
@@ -56,18 +50,16 @@ class MapCardViewModel @AssistedInject constructor(
     }
 
     private fun loadSetting() {
-        viewModelScope.launch(ioDispatcher) {
-            _setting = _repo.getById(_id).copy()
-            withContext(mainDispatcher) {
-                refreshFromSetting()
-                _isSet.value = _setting.cityInfo.name.isNotEmpty()
-            }
+        viewModelScope.launch {
+            _setting = _useMapSettingsUseCase.read(_id).copy()
+            refreshFromSetting()
+            _isSet.value = _setting.cityInfo.name.isNotEmpty()
         }
     }
 
     private fun saveSetting() {
-        viewModelScope.launch(ioDispatcher) {
-            _repo.updateSetting(_id, _setting)
+        viewModelScope.launch {
+            _useMapSettingsUseCase.updateSetting(_id, _setting)
             loadSetting()
         }
     }
@@ -91,7 +83,7 @@ class MapCardViewModel @AssistedInject constructor(
     companion object {
         @Suppress("UNCHECKED_CAST")
         fun provideFactory(
-            assistedFactory: Factory, // this is the Factory interface
+            assistedFactory: Factory,
             id: Long
         ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {

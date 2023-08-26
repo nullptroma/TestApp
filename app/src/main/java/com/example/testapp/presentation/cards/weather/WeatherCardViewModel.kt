@@ -9,13 +9,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.testapp.data.local.repositories.WeatherSettingsRepository
-import com.example.testapp.data.remote.repositories.WeatherRepository
 import com.example.testapp.di.IoDispatcher
 import com.example.testapp.di.MainDispatcher
 import com.example.testapp.di.ViewModelFactoryProvider
-import com.example.testapp.domain.models.cardsettings.WeatherSettings
 import com.example.testapp.domain.models.CityInfo
+import com.example.testapp.domain.models.cardsettings.WeatherSettings
+import com.example.testapp.domain.usecases.cardsdata.GetWeatherUseCase
+import com.example.testapp.domain.usecases.get_settings.UseCardSettingsUseCase
 import com.example.testapp.presentation.cards.CardViewModel
 import com.example.testapp.presentation.settings.CitySettingBridge
 import com.example.testapp.presentation.settings.SettingBridge
@@ -29,8 +29,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class WeatherCardViewModel @AssistedInject constructor(
-    private val _repo: WeatherSettingsRepository,
-    private val _dataRepo: WeatherRepository,
+    private val _useWeatherSettingsUseCase: UseCardSettingsUseCase<WeatherSettings>,
+    private val _getWeatherUseCase: GetWeatherUseCase,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     @MainDispatcher private val mainDispatcher: CoroutineDispatcher,
     @Assisted id: Long
@@ -69,7 +69,7 @@ class WeatherCardViewModel @AssistedInject constructor(
         viewModelScope.launch {
             _state.value = _state.value.copy(data = null)
             while (_isSet.value) {
-                val info = _dataRepo.get(_setting.cityInfo.coordinates)
+                val info = _getWeatherUseCase.get(_setting.cityInfo.coordinates)
                     ?.copy(city = _setting.cityInfo.name)
                 _state.value = WeatherCardState(data = info)
                 if (info != null) break
@@ -81,7 +81,7 @@ class WeatherCardViewModel @AssistedInject constructor(
 
     private fun loadSetting() {
         viewModelScope.launch(ioDispatcher) {
-            _setting = _repo.getById(_id).copy()
+            _setting = _useWeatherSettingsUseCase.read(_id).copy()
             withContext(mainDispatcher) {
                 refreshFromSetting()
             }
@@ -90,7 +90,7 @@ class WeatherCardViewModel @AssistedInject constructor(
 
     private fun saveSetting() {
         viewModelScope.launch(ioDispatcher) {
-            _repo.updateSetting(_id, _setting)
+            _useWeatherSettingsUseCase.updateSetting(_id, _setting)
             loadSetting()
         }
     }

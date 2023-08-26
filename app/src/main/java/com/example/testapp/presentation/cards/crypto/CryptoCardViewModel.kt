@@ -10,13 +10,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.testapp.MyObserver
-import com.example.testapp.data.local.repositories.CryptoSettingsRepository
-import com.example.testapp.data.remote.repositories.CryptoRepository
-import com.example.testapp.di.IoDispatcher
-import com.example.testapp.di.MainDispatcher
 import com.example.testapp.di.ViewModelFactoryProvider
 import com.example.testapp.domain.models.CryptosPackage
-import com.example.testapp.domain.models.cardsettings.CryptoSetting
+import com.example.testapp.domain.models.cardsettings.CryptoSettings
+import com.example.testapp.domain.usecases.cardsdata.GetLiveCryptoPackageUseCase
+import com.example.testapp.domain.usecases.get_settings.UseCardSettingsUseCase
 import com.example.testapp.presentation.cards.CardViewModel
 import com.example.testapp.presentation.settings.CryptosSettingBridge
 import com.example.testapp.presentation.settings.SettingBridge
@@ -24,15 +22,11 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.EntryPointAccessors
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class CryptoCardViewModel @AssistedInject constructor(
-    private val _settingsRepo: CryptoSettingsRepository,
-    private val _dataRepo: CryptoRepository,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
-    @MainDispatcher private val mainDispatcher: CoroutineDispatcher,
+    private val useCryptoSettingsUseCase: UseCardSettingsUseCase<CryptoSettings>,
+    private val _getLiveCryptoPackageUseCase: GetLiveCryptoPackageUseCase,
     @Assisted id: Long
 ) : CardViewModel() {
 
@@ -47,7 +41,7 @@ class CryptoCardViewModel @AssistedInject constructor(
     val state: State<CryptoCardState>
         get() = _state
     private val _state = mutableStateOf(CryptoCardState())
-    private var _setting: CryptoSetting = CryptoSetting()
+    private var _setting: CryptoSettings = CryptoSettings()
     private var _cryptosInfo: CryptosPackage? = null
     private val _observer: MyObserver<CryptosPackage> = MyObserver { pack ->
         _cryptosInfo = pack
@@ -56,7 +50,7 @@ class CryptoCardViewModel @AssistedInject constructor(
 
     init {
         _id = id
-        _dataRepo.liveData.observeForever(_observer)
+        _getLiveCryptoPackageUseCase.liveData.observeForever(_observer)
         loadSetting()
     }
 
@@ -71,18 +65,16 @@ class CryptoCardViewModel @AssistedInject constructor(
     }
 
     private fun loadSetting() {
-        viewModelScope.launch(ioDispatcher) {
-            _setting = _settingsRepo.getById(_id).copy()
-            withContext(mainDispatcher) {
-                refreshState()
-                _isSet.value = _setting.cryptoIdList.isNotEmpty()
-            }
+        viewModelScope.launch {
+            _setting = useCryptoSettingsUseCase.read(_id).copy()
+            refreshState()
+            _isSet.value = _setting.cryptoIdList.isNotEmpty()
         }
     }
 
     private fun saveSetting() {
-        viewModelScope.launch(ioDispatcher) {
-            _settingsRepo.updateSetting(_id, _setting)
+        viewModelScope.launch {
+            useCryptoSettingsUseCase.updateSetting(_id, _setting)
             loadSetting()
         }
     }
@@ -117,7 +109,7 @@ class CryptoCardViewModel @AssistedInject constructor(
 
     override fun onCleared() {
         super.onCleared()
-        _dataRepo.liveData.removeObserver(_observer)
+        _getLiveCryptoPackageUseCase.liveData.removeObserver(_observer)
     }
 }
 

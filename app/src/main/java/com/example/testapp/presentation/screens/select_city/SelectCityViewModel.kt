@@ -4,15 +4,15 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.testapp.MyObserver
-import com.example.testapp.data.local.repositories.CitiesRepository
 import com.example.testapp.domain.models.CityInfo
+import com.example.testapp.domain.usecases.GetLiveCitiesUseCate
 import com.example.testapp.presentation.settings.CitySettingBridge
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class SelectCityViewModel @Inject constructor(
-    val repo: CitiesRepository
+    val useCate: GetLiveCitiesUseCate
 ) : ViewModel() {
     val state: State<SelectCityScreenState>
         get() = _state
@@ -24,7 +24,7 @@ class SelectCityViewModel @Inject constructor(
     }
 
     init {
-        repo.getAll().observeForever(_observer)
+        useCate.liveData.observeForever(_observer)
     }
 
     fun restoreExit() {
@@ -47,6 +47,6 @@ class SelectCityViewModel @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
-        repo.getAll().removeObserver(_observer)
+        useCate.liveData.removeObserver(_observer)
     }
 }

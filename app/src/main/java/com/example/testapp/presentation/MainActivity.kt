@@ -74,7 +74,6 @@ fun TestApp() {
                 }
             }, onSetting = {
                 navController.navigate(Route.MAIN_MENU_SETTINGS.path)
-                menuSettingsViewModel.refresh()
             })
         }
         composable(

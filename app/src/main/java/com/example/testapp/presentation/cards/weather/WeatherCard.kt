@@ -7,11 +7,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.CircularProgressIndicator
@@ -20,12 +20,20 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
@@ -39,12 +47,22 @@ fun WeatherCard(vm: ViewModel?) {
     val state = vm.state.value
     val data = state.data
     Box(
-        modifier = Modifier.height(190.dp), contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center
     ) {
+        var height by remember {
+            mutableStateOf(0.dp)
+        }
+        val density: Density = LocalDensity.current
         Image(
-            modifier = Modifier.alpha(1f),
+            modifier = Modifier
+                .alpha(1f)
+                .fillMaxSize()
+                .onGloballyPositioned { coordinates ->
+                    height = with(density) { coordinates.size.height.toDp() }
+                },
             painter = painterResource(id = R.drawable.back),
-            contentDescription = ""
+            contentDescription = "",
+            contentScale = ContentScale.FillWidth
         )
         if (data == null) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -58,12 +76,18 @@ fun WeatherCard(vm: ViewModel?) {
             return
         }
         Column(
-            modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(height)
+                .padding(
+                    top = 0.dp,
+                    start = height * 0.08f,
+                    end = height * 0.08f,
+                    bottom = height * 0.08f
+                ), horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row(
-                modifier = Modifier
-                    .padding(start = 16.dp, end = 8.dp, top = 4.dp)
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -87,14 +111,12 @@ fun WeatherCard(vm: ViewModel?) {
             ) {
                 Column(
                     modifier = Modifier
-                        .weight(1f)
-                        .fillMaxSize()
-                        .padding(start = 12.dp, bottom = 16.dp),
+                        .padding(end = 4.dp)
+                        .weight(1f),
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
                         modifier = Modifier
-                            .fillMaxWidth()
                             .padding(end = 8.dp)
                             .basicMarquee(),
                         text = data.desc.let { it[0].uppercase() + it.substring(1) },
@@ -102,17 +124,19 @@ fun WeatherCard(vm: ViewModel?) {
                         maxLines = 1
                     )
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                            .padding(top = 4.dp, bottom = 4.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         AsyncImage(
-                            modifier = Modifier.size(64.dp),
+                            modifier = Modifier.weight(1f),
                             model = "https://openweathermap.org/img/w/${data.iconUrl}.png",
                             contentDescription = ""
                         )
                         Text(
-                            modifier = Modifier.padding(end = 4.dp),
                             text = "${String.format("%.1f", data.temp - 273, 15)} °C",
                             color = MaterialTheme.colorScheme.onPrimary,
                             fontWeight = FontWeight.Bold,
@@ -126,34 +150,59 @@ fun WeatherCard(vm: ViewModel?) {
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
+                            modifier = Modifier
+                                .weight(1f, false).padding(end=4.dp)
+                                .basicMarquee(),
                             text = "Ощущается как: ",
                             color = MaterialTheme.colorScheme.onPrimary,
-                            fontSize = 12.sp
+                            fontSize = 12.sp,
+                            maxLines = 1
                         )
                         Text(
-                            text = "${String.format("%.1f", data.tempFeels-273,15)} °C",
+                            text = "${String.format("%.1f", data.tempFeels - 273, 15)} °C",
                             color = MaterialTheme.colorScheme.onPrimary,
                             fontWeight = FontWeight.Bold,
                             fontFamily = FontFamily.Serif,
                         )
                     }
                 }
-                Column(
+                Row(
                     modifier = Modifier
-                        .weight(1f)
-                        .padding(end = 12.dp, bottom = 16.dp)
-                        .fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween
+                        .padding(
+                            start = 4.dp
+                        )
+                        .fillMaxHeight(),
                 ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
+                    Column(
+                        modifier = Modifier.fillMaxHeight(),
+                        verticalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
                             text = "Ветер",
                             color = MaterialTheme.colorScheme.onPrimary,
                             fontSize = 14.sp
                         )
+                        Text(
+                            text = "Давление",
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            fontSize = 14.sp
+                        )
+                        Text(
+                            text = "Влажность",
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            fontSize = 14.sp
+                        )
+                        Text(
+                            text = "Облачность",
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            fontSize = 14.sp
+                        )
+                    }
+                    Column(
+                        modifier = Modifier.fillMaxHeight(),
+                        verticalArrangement = Arrangement.SpaceBetween,
+                        horizontalAlignment = Alignment.End
+                    ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
                                 text = String.format("%.2f", data.windSpeed),
@@ -167,17 +216,7 @@ fun WeatherCard(vm: ViewModel?) {
                                 fontSize = 11.sp
                             )
                         }
-                    }
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = "Давление",
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            fontSize = 14.sp
-                        )
+
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
                                 text = String.format("%.2f", data.pressure.toDouble() * 0.750064),
@@ -191,17 +230,7 @@ fun WeatherCard(vm: ViewModel?) {
                                 fontSize = 11.sp
                             )
                         }
-                    }
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = "Влажность",
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            fontSize = 14.sp
-                        )
+
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
                                 text = data.humidity.toString(),
@@ -215,17 +244,7 @@ fun WeatherCard(vm: ViewModel?) {
                                 fontSize = 11.sp
                             )
                         }
-                    }
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = "Облачность",
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            fontSize = 14.sp
-                        )
+
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
                                 text = data.clouds.toString(),

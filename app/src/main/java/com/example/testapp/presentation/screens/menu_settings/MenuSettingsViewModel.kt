@@ -2,52 +2,41 @@ package com.example.testapp.presentation.screens.menu_settings
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.testapp.MyObserver
-import com.example.testapp.data.local.repositories.EnabledCardsRepository
-import com.example.testapp.di.IoDispatcher
-import com.example.testapp.di.MainDispatcher
 import com.example.testapp.domain.CardType
 import com.example.testapp.domain.models.cardsettings.EnabledCard
+import com.example.testapp.domain.usecases.GetLiveEnabledCardsUseCase
+import com.example.testapp.domain.usecases.SetEnabledCardsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class MenuSettingsViewModel @Inject constructor(
-    private val repo: EnabledCardsRepository,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
-    @MainDispatcher private val mainDispatcher: CoroutineDispatcher,
+    private val getLiveEnabledCardsUseCase: GetLiveEnabledCardsUseCase,
+    private val setEnabledCardsUseCase: SetEnabledCardsUseCase
 ) :
     ViewModel() {
     val state: State<MenuSettingsScreenState>
         get() = _state
     private val _state = mutableStateOf(MenuSettingsScreenState())
     private lateinit var mutableList: MutableList<EnabledCard>
-    private val liveData: LiveData<List<EnabledCard>> = repo.getAll()
     private val observer: Observer<List<EnabledCard>>
     private var _nextId = -1L
 
     init {
         observer = MyObserver { value ->
-            refresh()
+            refresh(value)
         }
-        liveData.observeForever(observer)
+        getLiveEnabledCardsUseCase.liveData.observeForever(observer)
     }
 
-    fun refresh() {
-        viewModelScope.launch(ioDispatcher) {
-            val orig = liveData.value ?: return@launch
-            withContext(mainDispatcher) {
-                drawList(orig)
-            }
-            _nextId = -1L
-        }
+    private fun refresh(orig:List<EnabledCard>) {
+        drawList(orig)
+        _nextId = -1L
     }
 
     private fun drawList(orig: List<EnabledCard>) {
@@ -61,8 +50,8 @@ class MenuSettingsViewModel @Inject constructor(
             mutableList[i] = mutableList[i].copy(id = maxOf(0L, mutableList[i].id), priority = i.toLong())
         }
 
-        viewModelScope.launch(ioDispatcher) {
-            repo.setAll(mutableList)
+        viewModelScope.launch {
+            setEnabledCardsUseCase.setAll(mutableList)
         }
     }
 
@@ -89,7 +78,7 @@ class MenuSettingsViewModel @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
-        liveData.removeObserver(observer)
+        getLiveEnabledCardsUseCase.liveData.removeObserver(observer)
     }
 }
 

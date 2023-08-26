@@ -3,32 +3,29 @@ package com.example.testapp.presentation.screens.select_cryptos
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.example.testapp.MyObserver
-import com.example.testapp.data.remote.repositories.CryptoRepository
+import androidx.lifecycle.viewModelScope
 import com.example.testapp.domain.models.CryptoData
-import com.example.testapp.domain.models.CryptosPackage
+import com.example.testapp.domain.usecases.GetFirstValidCryptoPackageUseCase
 import com.example.testapp.presentation.settings.CryptosSettingBridge
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import okhttp3.internal.toImmutableList
 import javax.inject.Inject
 
 @HiltViewModel
-class SelectCryptosViewModel @Inject constructor(private val repository: CryptoRepository) :
+class SelectCryptosViewModel @Inject constructor(private val useCase: GetFirstValidCryptoPackageUseCase) :
     ViewModel() {
     val state: State<SelectCryptosScreenState>
         get() = _state
     private val _state = mutableStateOf(SelectCryptosScreenState())
     private var origList: List<CryptoData> = listOf()
-    private val _observer: MyObserver<CryptosPackage> = MyObserver {
-        origList = it.data
-        if(!it.error && !it.loading)
-            removeObserver()
-        refreshState()
-    }
     private var _bridge: CryptosSettingBridge? = null
 
     init {
-        repository.liveData.observeForever(_observer)
+        viewModelScope.launch {
+            origList = useCase.get().data
+            refreshState()
+        }
     }
 
     private fun refreshState() {
@@ -70,9 +67,5 @@ class SelectCryptosViewModel @Inject constructor(private val repository: CryptoR
             }
         }
         refreshState()
-    }
-
-    private fun removeObserver() {
-        repository.liveData.removeObserver(_observer)
     }
 }
