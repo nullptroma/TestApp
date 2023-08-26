@@ -3,7 +3,7 @@ package com.example.testapp.data.local.repositories
 import com.example.testapp.data.local.dao.WeatherDao
 import com.example.testapp.data.local.model.DbWeatherSetting
 import com.example.testapp.domain.models.CityInfo
-import com.example.testapp.domain.cardsettings.WeatherSettings
+import com.example.testapp.domain.models.cardsettings.WeatherSettings
 import javax.inject.Inject
 import javax.inject.Singleton
 

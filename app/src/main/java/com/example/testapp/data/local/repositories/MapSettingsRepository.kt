@@ -3,7 +3,7 @@ package com.example.testapp.data.local.repositories
 import com.example.testapp.data.local.dao.MapDao
 import com.example.testapp.data.local.model.DbMapSetting
 import com.example.testapp.domain.models.CityInfo
-import com.example.testapp.domain.cardsettings.MapSettings
+import com.example.testapp.domain.models.cardsettings.MapSettings
 import javax.inject.Inject
 import javax.inject.Singleton
 

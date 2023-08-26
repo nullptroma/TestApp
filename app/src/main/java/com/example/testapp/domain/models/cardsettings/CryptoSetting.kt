@@ -1,3 +1,3 @@
-package com.example.testapp.domain.cardsettings
+package com.example.testapp.domain.models.cardsettings
 
 data class CryptoSetting(var cryptoIdList: List<String> = listOf())

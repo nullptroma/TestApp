@@ -15,7 +15,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.testapp.domain.models.EnabledCard
+import com.example.testapp.domain.models.cardsettings.EnabledCard
 import com.example.testapp.presentation.cards.CardsTable
 import com.example.testapp.presentation.cards.DrawableCardViewModel
 import com.example.testapp.presentation.screens.main.MainScreen

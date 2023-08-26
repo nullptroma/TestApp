@@ -11,7 +11,7 @@ import com.example.testapp.data.local.repositories.EnabledCardsRepository
 import com.example.testapp.di.IoDispatcher
 import com.example.testapp.di.MainDispatcher
 import com.example.testapp.domain.CardType
-import com.example.testapp.domain.models.EnabledCard
+import com.example.testapp.domain.models.cardsettings.EnabledCard
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
@@ -31,6 +31,7 @@ class MenuSettingsViewModel @Inject constructor(
     private lateinit var mutableList: MutableList<EnabledCard>
     private val liveData: LiveData<List<EnabledCard>> = repo.getAll()
     private val observer: Observer<List<EnabledCard>>
+    private var _nextId = -1L
 
     init {
         observer = MyObserver { value ->
@@ -45,6 +46,7 @@ class MenuSettingsViewModel @Inject constructor(
             withContext(mainDispatcher) {
                 drawList(orig)
             }
+            _nextId = -1L
         }
     }
 
@@ -56,7 +58,7 @@ class MenuSettingsViewModel @Inject constructor(
 
     fun save() {
         for (i in 0 until mutableList.size) {
-            mutableList[i].priority = i.toLong()
+            mutableList[i] = mutableList[i].copy(id = maxOf(0L, mutableList[i].id), priority = i.toLong())
         }
 
         viewModelScope.launch(ioDispatcher) {
@@ -72,8 +74,9 @@ class MenuSettingsViewModel @Inject constructor(
         _state.value = _state.value.copy(list = mutableList.toMutableList())
     }
 
+
     fun createCard(type: CardType) {
-        mutableList.add(EnabledCard(0, type, 100))
+        mutableList.add(EnabledCard(_nextId--, type, 100))
         _state.value = _state.value.copy(list = mutableList.toMutableList())
     }
 

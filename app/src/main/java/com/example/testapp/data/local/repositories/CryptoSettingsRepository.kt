@@ -2,7 +2,7 @@ package com.example.testapp.data.local.repositories
 
 import com.example.testapp.data.local.dao.CryptoDao
 import com.example.testapp.data.local.model.DbCryptoSetting
-import com.example.testapp.domain.cardsettings.CryptoSetting
+import com.example.testapp.domain.models.cardsettings.CryptoSetting
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import javax.inject.Inject

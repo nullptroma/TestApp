@@ -23,15 +23,6 @@ interface EnabledCardsDao {
     @Update
     fun updateAll(list: List<DbEnabledCard>)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun add(item: DbEnabledCard)
-
-    @Query("DELETE FROM enabled_cards WHERE card_id = :id")
-    fun deleteById(id: Long)
-
-    @Query("DELETE FROM enabled_cards")
-    fun deleteAll()
-
     @Delete
     fun deleteAll(list: List<DbEnabledCard>)
 }

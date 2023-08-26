@@ -1,4 +1,4 @@
-package com.example.testapp.domain.models
+package com.example.testapp.domain.models.cardsettings
 
 import com.example.testapp.domain.CardType
 
