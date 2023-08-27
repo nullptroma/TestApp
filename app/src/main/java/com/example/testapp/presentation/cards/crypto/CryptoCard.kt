@@ -52,7 +52,7 @@ fun CryptoCard(vm: ViewModel?) {
             CircularProgressIndicator()
         } else if (state.info.isNotEmpty()) {
             Row(
-                modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically
+                modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically
             ) {
                 for (crypto in state.info) {
                     Item(Modifier.width(width / 3 - 2.dp), crypto)
