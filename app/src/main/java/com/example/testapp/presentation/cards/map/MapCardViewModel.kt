@@ -46,7 +46,7 @@ class MapCardViewModel @AssistedInject constructor(
     }
 
     private fun refreshFromSetting() {
-        _state.value = _state.value.copy(city = _setting.cityInfo.name)
+        _state.value = _state.value.copy(coordinates = _setting.cityInfo.coordinates)
     }
 
     private fun loadSetting() {

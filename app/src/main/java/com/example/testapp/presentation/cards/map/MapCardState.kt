@@ -1,3 +1,5 @@
 package com.example.testapp.presentation.cards.map
 
-data class MapCardState(val city: String = "")
+import com.example.testapp.domain.models.Coordinates
+
+data class MapCardState(val coordinates: Coordinates = Coordinates())

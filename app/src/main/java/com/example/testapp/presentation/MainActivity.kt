@@ -28,6 +28,7 @@ import com.example.testapp.presentation.screens.select_cryptos.SelectCryptosView
 import com.example.testapp.presentation.settings.CitySettingBridge
 import com.example.testapp.presentation.settings.CryptosSettingBridge
 import com.example.testapp.ui.theme.TestAppTheme
+import com.yandex.mapkit.MapKitFactory
 import dagger.hilt.android.AndroidEntryPoint
 import com.example.testapp.presentation.screens.menu_settings.MenuSettings as MenuSettings1
 
@@ -35,6 +36,7 @@ import com.example.testapp.presentation.screens.menu_settings.MenuSettings as Me
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        MapKitFactory.initialize(this)
         setContent {
             TestAppTheme {
                 Surface(
@@ -44,6 +46,16 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        MapKitFactory.getInstance().onStart()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        MapKitFactory.getInstance().onStop()
     }
 }
 

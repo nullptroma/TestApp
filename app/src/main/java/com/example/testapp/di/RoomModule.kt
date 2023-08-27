@@ -70,7 +70,7 @@ object RoomModule {
                 Executors.newSingleThreadExecutor().execute {
                     room?.let {
                         val dao = it.citiesDao
-                        val list = readCities(appContext).map { city -> DbCity(0, city.name, "RU", city.coords.lat, city.coords.lat) }
+                        val list = readCities(appContext).map { city -> DbCity(0, city.name, "RU", city.coords.lat, city.coords.lon) }
                         dao.add(list)
                     }
                 }

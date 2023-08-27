@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -51,7 +52,7 @@ fun CryptoCard(vm: ViewModel?) {
             CircularProgressIndicator()
         } else if (state.info.isNotEmpty()) {
             Row(
-                modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center
+                modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically
             ) {
                 for (crypto in state.info) {
                     Item(Modifier.width(width / 3 - 2.dp), crypto)
@@ -66,15 +67,15 @@ fun CryptoCard(vm: ViewModel?) {
 @Composable
 fun Item(modifier: Modifier, crypto: CryptoData) {
     Box(
-        modifier = modifier.padding(4.dp)
+        modifier = modifier.padding(4.dp), contentAlignment = Alignment.Center
     ) {
         Card(
-            modifier = Modifier, elevation = CardDefaults.cardElevation(
+            modifier = Modifier.fillMaxSize(), elevation = CardDefaults.cardElevation(
                 defaultElevation = 8.dp
             )
         ) {
             Column(
-                modifier = Modifier
+                modifier = Modifier.fillMaxSize()
                     .padding(8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
