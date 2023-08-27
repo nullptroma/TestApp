@@ -1,5 +1,7 @@
 package com.example.testapp.presentation.screens.main
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.LocalOverscrollConfiguration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,6 +29,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,6 +41,7 @@ import com.example.testapp.presentation.Route
 import com.example.testapp.presentation.cards.DrawableCardViewModel
 import com.example.testapp.presentation.settings.SettingBridge
 
+@OptIn(ExperimentalFoundationApi::class)
 @ExperimentalMaterial3Api
 @Composable
 fun MainScreen(
@@ -72,14 +76,18 @@ fun MainScreen(
             colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = MaterialTheme.colorScheme.primary)
         )
         if (!state.loading) {
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
-                itemsIndexed(drawableVms) { index, it ->
-                    CardItem(
-                        Modifier.padding(5.dp),
-                        it,
-                        state.cards[index].type,
-                        onSetting = { bridge -> onCardSetting(bridge, it.settingRoute) }
-                    )
+            CompositionLocalProvider(
+                LocalOverscrollConfiguration provides null
+            ) {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    itemsIndexed(drawableVms) { index, it ->
+                        CardItem(Modifier.padding(5.dp),
+                            it,
+                            state.cards[index].type,
+                            onSetting = { bridge -> onCardSetting(bridge, it.settingRoute) })
+                    }
                 }
             }
         } else Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -108,9 +116,13 @@ fun CardItem(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = type.text, Modifier.padding(start=6.dp))
+                Text(text = type.text, Modifier.padding(start = 6.dp))
                 IconButton(onClick = { onSetting(vm.createSettingBridge()) }) {
-                    Icon(Icons.Filled.Settings, contentDescription = "Settings", tint = MaterialTheme.colorScheme.primary)
+                    Icon(
+                        Icons.Filled.Settings,
+                        contentDescription = "Settings",
+                        tint = MaterialTheme.colorScheme.primary
+                    )
                 }
             }
             Divider(color = Color.LightGray, thickness = 1.dp)
@@ -120,17 +132,16 @@ fun CardItem(
                     .padding(4.dp),
                 contentAlignment = Alignment.Center
             ) {
-                if(vm.isSet.value)
-                    drawableVm.Draw()
-                else
-                    Box(
-                        Modifier
-                            .fillMaxSize()
-                            .height(180.dp), contentAlignment = Alignment.Center) {
-                        Button(onClick = { onSetting(vm.createSettingBridge()) }) {
-                            Text(text = "Выбрать")
-                        }
+                if (vm.isSet.value) drawableVm.Draw()
+                else Box(
+                    Modifier
+                        .fillMaxSize()
+                        .height(180.dp), contentAlignment = Alignment.Center
+                ) {
+                    Button(onClick = { onSetting(vm.createSettingBridge()) }) {
+                        Text(text = "Выбрать")
                     }
+                }
             }
         }
     }
