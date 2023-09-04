@@ -1,22 +1,22 @@
 package com.example.testapp.presentation.screens.select_city
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.testapp.MyObserver
 import com.example.testapp.domain.models.CityInfo
 import com.example.testapp.domain.usecases.GetLiveCitiesUseCate
 import com.example.testapp.presentation.settings.CitySettingBridge
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 @HiltViewModel
 class SelectCityViewModel @Inject constructor(
-    val useCate: GetLiveCitiesUseCate
+    private val useCase: GetLiveCitiesUseCate
 ) : ViewModel() {
-    val state: State<SelectCityScreenState>
+    val state: StateFlow<SelectCityScreenState>
         get() = _state
-    private val _state = mutableStateOf(SelectCityScreenState())
+    private val _state = MutableStateFlow(SelectCityScreenState())
 
     private lateinit var _bridge: CitySettingBridge
     private val _observer = MyObserver<List<CityInfo>> {
@@ -24,7 +24,7 @@ class SelectCityViewModel @Inject constructor(
     }
 
     init {
-        useCate.liveData.observeForever(_observer)
+        useCase.liveData.observeForever(_observer)
     }
 
     fun restoreExit() {
@@ -47,6 +47,6 @@ class SelectCityViewModel @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
-        useCate.liveData.removeObserver(_observer)
+        useCase.liveData.removeObserver(_observer)
     }
 }

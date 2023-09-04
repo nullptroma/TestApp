@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Base.Theme.TestApp" parent="Theme.Material3.Light.NoActionBar">
-
+        <item name="android:statusBarColor">@color/toolbar_background_color</item>
     </style>
 </resources>

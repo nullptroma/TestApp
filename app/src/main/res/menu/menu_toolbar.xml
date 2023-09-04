@@ -1,12 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item
-        android:id="@+id/search_info"
-        android:title="говно"
-        android:icon="@drawable/baseline_search_24"/>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/edit_button"
+        android:id="@+id/search_button"
+        android:title="Поиск"
+        android:icon="@drawable/baseline_search_24"
+        app:showAsAction="ifRoom|collapseActionView"
+        android:visible="false"
+        app:actionViewClass="androidx.appcompat.widget.SearchView" />
+
+    <item
+        android:id="@+id/text_button"
         android:title="Править"
-        android:visible="true"/>
+        android:visible="false"
+        app:showAsAction="always|withText" />
+
 </menu>
