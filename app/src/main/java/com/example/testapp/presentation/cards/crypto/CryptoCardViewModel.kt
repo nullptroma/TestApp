@@ -16,8 +16,8 @@ import com.example.testapp.domain.models.cardsettings.CryptoSettings
 import com.example.testapp.domain.usecases.cardsdata.GetLiveCryptoPackageUseCase
 import com.example.testapp.domain.usecases.get_settings.UseCardSettingsUseCase
 import com.example.testapp.presentation.cards.CardViewModel
-import com.example.testapp.presentation.settings.CryptosSettingBridge
-import com.example.testapp.presentation.settings.SettingBridge
+import com.example.testapp.domain.models.settings.CryptosSettingBridge
+import com.example.testapp.domain.models.settings.SettingBridge
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject

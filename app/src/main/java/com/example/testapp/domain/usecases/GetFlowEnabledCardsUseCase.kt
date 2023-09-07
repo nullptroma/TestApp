@@ -5,8 +5,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class GetLiveEnabledCardsUseCase @Inject constructor(
+class GetFlowEnabledCardsUseCase @Inject constructor(
     repo: EnabledCardsRepository,
 ) {
-    val liveData = repo.getAll()
+    val flowData = repo.getAll()
 }

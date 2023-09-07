@@ -17,8 +17,8 @@ import com.example.testapp.domain.models.cardsettings.WeatherSettings
 import com.example.testapp.domain.usecases.cardsdata.GetWeatherUseCase
 import com.example.testapp.domain.usecases.get_settings.UseCardSettingsUseCase
 import com.example.testapp.presentation.cards.CardViewModel
-import com.example.testapp.presentation.settings.CitySettingBridge
-import com.example.testapp.presentation.settings.SettingBridge
+import com.example.testapp.domain.models.settings.CitySettingBridge
+import com.example.testapp.domain.models.settings.SettingBridge
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject

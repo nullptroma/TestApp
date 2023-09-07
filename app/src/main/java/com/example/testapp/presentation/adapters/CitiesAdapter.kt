@@ -7,7 +7,9 @@ import com.example.testapp.databinding.CityItemBinding
 import com.example.testapp.domain.models.CityInfo
 import com.example.testapp.presentation.viewholders.CityViewHolder
 
-class CityAdapter(private val _cityList: List<CityInfo>) : RecyclerView.Adapter<CityViewHolder>() {
+class CitiesAdapter(private val _cityList: List<CityInfo>) : RecyclerView.Adapter<CityViewHolder>() {
+    var onClick : ((CityInfo) -> Unit)? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CityViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = CityItemBinding.inflate(inflater, parent, false)
@@ -21,5 +23,8 @@ class CityAdapter(private val _cityList: List<CityInfo>) : RecyclerView.Adapter<
 
     override fun onBindViewHolder(holder: CityViewHolder, position: Int) {
         holder.bind(_cityList[position])
+        holder.callback = {
+            onClick?.invoke(it)
+        }
     }
 }

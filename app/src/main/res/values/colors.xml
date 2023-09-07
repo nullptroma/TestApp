@@ -10,12 +10,13 @@
     <color name="red">#FFFF0000</color>
 
 
-    <color name="main_menu_text">#353535</color>
-    <color name="primary_color">#3EAEDE</color>
-    <color name="toolbar_background_color">#46A4CC</color>
-    <color name="bg_weather_card_end">#1C86B4</color>
-    <color name="negative_course">#FF2727</color>
+    <color name="primary_color">#46A4CC</color>
+    <color name="on_primary_color">#FFFFFF</color>
+    <color name="surface_color">#F2F2F7</color>
+    <color name="container_color">#FFFFFF</color>
+    <color name="on_container_color">#F1F1F1</color>
     <color name="positive_course">#36DD0D</color>
     <color name="marker_map_color">#FD2A2A</color>
-    <color name="edit_menu_image_color">#D9D9D9</color>
+    <color name="card_name_color">#353535</color>
+    <color name="toolbar_color">#46A4CC</color>
 </resources>

@@ -1,6 +1,7 @@
 package com.example.testapp.presentation.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,7 +29,17 @@ class FirstFragment : Fragment() {
     }
 
     private fun setMenuItems(visible: Boolean) {
-        menu.findItem(R.id.text_button).isVisible = visible
+        Log.d("MyTag", "setMenuItems $visible")
+
+        val textButton = menu.findItem(R.id.text_button)
+        textButton.isVisible = visible
+        if(visible) {
+            textButton.title = "Правка"
+            textButton.setOnMenuItemClickListener {
+                findNavController().navigate(R.id.action_Menu_to_MenuSettingsFragment)
+                true
+            }
+        }
     }
 
     override fun onCreateView(
@@ -37,7 +48,6 @@ class FirstFragment : Fragment() {
     ): View {
 
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
@@ -45,17 +55,17 @@ class FirstFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.buttonFirst.setOnClickListener {
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+            findNavController().navigate(R.id.action_Menu_to_SelectCityFragment)
         }
+    }
 
-        //val menu: Menu = toolbar.menu
-        //val searchItem: MenuItem = menu.findItem(R.id.search_info)
-        //val editItem: MenuItem = menu.findItem(R.id.edit_button)
+    override fun onStop() {
+        super.onStop()
+        setMenuItems(false)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        setMenuItems(false)
     }
 }

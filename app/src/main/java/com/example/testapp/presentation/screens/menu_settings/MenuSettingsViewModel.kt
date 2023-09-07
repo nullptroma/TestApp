@@ -1,37 +1,35 @@
 package com.example.testapp.presentation.screens.menu_settings
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.testapp.MyObserver
 import com.example.testapp.domain.CardType
 import com.example.testapp.domain.models.cardsettings.EnabledCard
-import com.example.testapp.domain.usecases.GetLiveEnabledCardsUseCase
+import com.example.testapp.domain.usecases.GetFlowEnabledCardsUseCase
 import com.example.testapp.domain.usecases.SetEnabledCardsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MenuSettingsViewModel @Inject constructor(
-    private val getLiveEnabledCardsUseCase: GetLiveEnabledCardsUseCase,
+    private val getFlowEnabledCardsUseCase: GetFlowEnabledCardsUseCase,
     private val setEnabledCardsUseCase: SetEnabledCardsUseCase
 ) :
     ViewModel() {
-    val state: State<MenuSettingsScreenState>
+    val state: StateFlow<MenuSettingsScreenState>
         get() = _state
-    private val _state = mutableStateOf(MenuSettingsScreenState())
+    private val _state = MutableStateFlow(MenuSettingsScreenState())
     private lateinit var mutableList: MutableList<EnabledCard>
-    private val observer: Observer<List<EnabledCard>>
     private var _nextId = -1L
 
     init {
-        observer = MyObserver { value ->
-            refresh(value)
+        viewModelScope.launch {
+            getFlowEnabledCardsUseCase.flowData.collect {
+                refresh(it)
+            }
         }
-        getLiveEnabledCardsUseCase.liveData.observeForever(observer)
     }
 
     private fun refresh(orig:List<EnabledCard>) {
@@ -60,7 +58,7 @@ class MenuSettingsViewModel @Inject constructor(
         mutableList[from] = mutableList[to]
         mutableList[to] = buf
 
-        _state.value = _state.value.copy(list = mutableList.toMutableList())
+        //_state.value = _state.value.copy(list = mutableList.toMutableList())
     }
 
 
@@ -74,11 +72,6 @@ class MenuSettingsViewModel @Inject constructor(
             it.id == id
         }
         _state.value = _state.value.copy(list = mutableList.toMutableList())
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        getLiveEnabledCardsUseCase.liveData.removeObserver(observer)
     }
 }
 

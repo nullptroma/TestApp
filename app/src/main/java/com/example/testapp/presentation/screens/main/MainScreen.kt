@@ -39,7 +39,7 @@ import androidx.compose.ui.unit.dp
 import com.example.testapp.domain.CardType
 import com.example.testapp.presentation.Route
 import com.example.testapp.presentation.cards.DrawableCardViewModel
-import com.example.testapp.presentation.settings.SettingBridge
+import com.example.testapp.domain.models.settings.SettingBridge
 
 @OptIn(ExperimentalFoundationApi::class)
 @ExperimentalMaterial3Api

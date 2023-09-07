@@ -1,4 +1,4 @@
-package com.example.testapp.presentation.settings
+package com.example.testapp.domain.models.settings
 
 import com.example.testapp.domain.models.CityInfo
 

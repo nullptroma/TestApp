@@ -1,7 +1,6 @@
 package com.example.testapp.presentation.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,25 +9,24 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testapp.R
 import com.example.testapp.databinding.FragmentSelectCityBinding
 import com.example.testapp.presentation.activities.MainActivity
-import com.example.testapp.presentation.adapters.CityAdapter
+import com.example.testapp.presentation.adapters.CitiesAdapter
 import com.example.testapp.presentation.screens.select_city.SelectCityViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SelectCityFragment : Fragment() {
-    private val viewModel by viewModels<SelectCityViewModel>()
-
+    private val viewModel: SelectCityViewModel by viewModels()
     private var _binding: FragmentSelectCityBinding? = null
-
+    private val binding get() = _binding!!
     private val menu
         get() = (activity as MainActivity).toolbar.menu
 
-    private val binding get() = _binding!!
 
     override fun onStart() {
         super.onStart()
@@ -52,21 +50,31 @@ class SelectCityFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.citiesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-
         viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+            repeatOnLifecycle(Lifecycle.State.CREATED) {
                 viewModel.state.collect { uiState ->
-                    Log.d("MyTag", "Cities: ${uiState.cities.size}")
-                    binding.citiesRecyclerView.adapter = CityAdapter(uiState.cities)
+                    val adapter = CitiesAdapter(uiState.cities)
+                    adapter.onClick = {
+                        viewModel.selectCity(it)
+                    }
+                    binding.citiesRecyclerView.adapter = adapter
+
+                    if (uiState.exit) {
+                        viewModel.restoreExit()
+                        findNavController().navigateUp()
+                    }
                 }
             }
         }
     }
 
+    override fun onStop() {
+        super.onStop()
+        setMenuItems(false)
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        setMenuItems(false)
     }
 }

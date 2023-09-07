@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/enabled_card_item" xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/container_color">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_margin="8dp"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/enabled_card_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:layout_marginStart="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:textColor="@color/card_name_color"/>
+
+        <ImageView
+            android:id="@+id/drag_handler_image"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="8dp"
+            android:scaleType="fitXY"
+            android:background="#00000000"
+            android:contentDescription="@string/drag_card"
+            android:src="@drawable/baseline_drag_handle_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/remove_card_button"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/card_name_color" />
+
+        <ImageButton
+            android:id="@+id/remove_card_button"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:background="#00000000"
+            android:layout_marginEnd="4dp"
+            android:contentDescription="@string/remove_card"
+            android:src="@drawable/baseline_delete_forever_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/red" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

@@ -16,6 +16,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.testapp.domain.models.cardsettings.EnabledCard
+import com.example.testapp.domain.models.settings.CitySettingBridge
+import com.example.testapp.domain.models.settings.CryptosSettingBridge
 import com.example.testapp.presentation.cards.CardsTable
 import com.example.testapp.presentation.cards.DrawableCardViewModel
 import com.example.testapp.presentation.screens.main.MainScreen
@@ -25,8 +27,6 @@ import com.example.testapp.presentation.screens.select_city.SelectCityScreen
 import com.example.testapp.presentation.screens.select_city.SelectCityViewModel
 import com.example.testapp.presentation.screens.select_cryptos.SelectCryptosScreen
 import com.example.testapp.presentation.screens.select_cryptos.SelectCryptosViewModel
-import com.example.testapp.presentation.settings.CitySettingBridge
-import com.example.testapp.presentation.settings.CryptosSettingBridge
 import com.example.testapp.ui.theme.TestAppTheme
 import com.yandex.mapkit.MapKitFactory
 import dagger.hilt.android.AndroidEntryPoint
@@ -78,7 +78,6 @@ fun TestApp() {
                 if(navController.currentBackStackEntry?.destination?.route != Route.MAIN_SCREEN.path)
                     return@MainScreen
                 if (route == Route.SELECT_CITY_SCREEN && bridge is CitySettingBridge) {
-                    selectCityViewModel.setBridge(bridge)
                     navController.navigate(route.path)
                 } else if (route == Route.SELECT_CRYPTOS_SCREEN && bridge is CryptosSettingBridge) {
                     cryptosSettingsViewModel.setBridge(bridge)

@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.testapp.domain.models.CryptoData
 import com.example.testapp.domain.usecases.GetFirstValidCryptoPackageUseCase
-import com.example.testapp.presentation.settings.CryptosSettingBridge
+import com.example.testapp.domain.models.settings.CryptosSettingBridge
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import okhttp3.internal.toImmutableList

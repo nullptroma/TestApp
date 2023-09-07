@@ -2,17 +2,16 @@ package com.example.testapp.presentation.screens.main
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.testapp.MyObserver
 import com.example.testapp.domain.models.cardsettings.EnabledCard
-import com.example.testapp.domain.usecases.GetLiveEnabledCardsUseCase
+import com.example.testapp.domain.usecases.GetFlowEnabledCardsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val getLiveEnabledCardsUseCase: GetLiveEnabledCardsUseCase
+    private val getFlowEnabledCardsUseCase: GetFlowEnabledCardsUseCase
 ) : ViewModel() {
     val state: State<MainScreenState>
         get() = _state
@@ -22,11 +21,11 @@ class MainViewModel @Inject constructor(
     }
 
     init {
-        getLiveEnabledCardsUseCase.liveData.observeForever(observer)
+        //getFlowEnabledCardsUseCase.liveData.observeForever(observer)
     }
 
     override fun onCleared() {
         super.onCleared()
-        getLiveEnabledCardsUseCase.liveData.removeObserver(observer)
+        //getFlowEnabledCardsUseCase.liveData.removeObserver(observer)
     }
 }
