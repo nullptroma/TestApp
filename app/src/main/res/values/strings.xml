@@ -19,4 +19,10 @@
     <string name="add_card">Add card</string>
     <string name="remove_card">Remove card</string>
     <string name="drag_card">Drag card</string>
+    <string name="card_type">CardType</string>
+
+
+    <!-- описание контентов  -->
+    <string name="settings_content">Settings</string>
+
 </resources>

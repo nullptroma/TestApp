@@ -1,31 +1,27 @@
 package com.example.testapp.presentation.screens.main
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.example.testapp.MyObserver
-import com.example.testapp.domain.models.cardsettings.EnabledCard
+import androidx.lifecycle.viewModelScope
 import com.example.testapp.domain.usecases.GetFlowEnabledCardsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val getFlowEnabledCardsUseCase: GetFlowEnabledCardsUseCase
 ) : ViewModel() {
-    val state: State<MainScreenState>
+    val state: StateFlow<MainScreenState>
         get() = _state
-    private val _state = mutableStateOf(MainScreenState())
-    private val observer: MyObserver<List<EnabledCard>> = MyObserver {
-        _state.value = _state.value.copy(cards = it, loading = false)
-    }
+    private val _state = MutableStateFlow(MainScreenState())
 
     init {
-        //getFlowEnabledCardsUseCase.liveData.observeForever(observer)
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        //getFlowEnabledCardsUseCase.liveData.removeObserver(observer)
+        viewModelScope.launch {
+            getFlowEnabledCardsUseCase.flowData.collect {
+                _state.value = _state.value.copy(cards = it, loading = false)
+            }
+        }
     }
 }

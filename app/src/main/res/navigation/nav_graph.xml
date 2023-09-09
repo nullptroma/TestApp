@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/Menu"
-        android:name="com.example.testapp.presentation.fragments.FirstFragment"
+        android:name="com.example.testapp.presentation.fragments.MainFragment"
         android:label="@string/menu_fragment_label"
-        tools:layout="@layout/fragment_first">
+        tools:layout="@layout/fragment_main">
         <action
             android:id="@+id/action_Menu_to_SelectCityFragment"
             app:destination="@id/SelectCityFragment" />

@@ -6,18 +6,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testapp.R
-import com.example.testapp.databinding.FragmentFirstBinding
+import com.example.testapp.databinding.FragmentMainBinding
 import com.example.testapp.presentation.activities.MainActivity
+import com.example.testapp.presentation.adapters.CardsAdapter
+import com.example.testapp.presentation.screens.main.MainViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 
-/**
- * A simple [Fragment] subclass as the default destination in the navigation.
- */
-class FirstFragment : Fragment() {
-
-    private var _binding: FragmentFirstBinding? = null
+@AndroidEntryPoint
+class MainFragment : Fragment() {
+    private val _viewModel:MainViewModel by viewModels()
+    private var _binding: FragmentMainBinding? = null
     private val menu
         get() = (activity as MainActivity).toolbar.menu
 
@@ -47,15 +54,20 @@ class FirstFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = FragmentFirstBinding.inflate(inflater, container, false)
+        _binding = FragmentMainBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.cardsRecyclerview.layoutManager = LinearLayoutManager(requireContext())
 
-        binding.buttonFirst.setOnClickListener {
-            findNavController().navigate(R.id.action_Menu_to_SelectCityFragment)
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.CREATED) {
+                _viewModel.state.collect { uiState ->
+                    binding.cardsRecyclerview.adapter = CardsAdapter(uiState.cards)
+                }
+            }
         }
     }
 
