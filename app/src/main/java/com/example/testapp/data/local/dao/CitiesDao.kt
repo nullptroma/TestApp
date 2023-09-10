@@ -1,11 +1,11 @@
 package com.example.testapp.data.local.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.testapp.data.local.model.DbCity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CitiesDao {
@@ -16,5 +16,5 @@ interface CitiesDao {
     fun add(city: List<DbCity>)
 
     @Query("SELECT * FROM cities")
-    fun getAll(): LiveData<List<DbCity>>
+    fun getAll(): Flow<List<DbCity>>
 }

@@ -1,8 +1,8 @@
 package com.example.testapp.di
 
-import com.example.testapp.presentation.cards.crypto.CryptoCardViewModel
-import com.example.testapp.presentation.cards.map.MapCardViewModel
-import com.example.testapp.presentation.cards.weather.WeatherCardViewModel
+import com.example.testapp.presentation.viewmodels.cards.CryptoCardViewModel
+import com.example.testapp.presentation.viewmodels.cards.MapCardViewModel
+import com.example.testapp.presentation.viewmodels.cards.WeatherCardViewModel
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent

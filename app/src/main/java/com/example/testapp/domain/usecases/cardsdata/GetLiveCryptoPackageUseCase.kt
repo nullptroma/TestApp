@@ -8,5 +8,5 @@ import javax.inject.Singleton
 class GetLiveCryptoPackageUseCase @Inject constructor(
     dataRepo: CryptoRepository,
 ) {
-    val liveData = dataRepo.liveData
+    val liveData = dataRepo.flowData
 }

@@ -1,4 +1,4 @@
-package com.example.testapp.presentation.screens.select_cryptos
+package com.example.testapp.presentation.viewmodels
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.testapp.domain.models.CryptoData
 import com.example.testapp.domain.usecases.GetFirstValidCryptoPackageUseCase
 import com.example.testapp.domain.models.settings.CryptosSettingBridge
+import com.example.testapp.presentation.states.screens.SelectCryptosScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import okhttp3.internal.toImmutableList

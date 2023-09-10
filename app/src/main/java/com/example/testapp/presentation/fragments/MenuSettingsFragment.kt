@@ -2,7 +2,6 @@ package com.example.testapp.presentation.fragments
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,7 +20,7 @@ import com.example.testapp.databinding.FragmentMenuSettingsBinding
 import com.example.testapp.domain.CardType
 import com.example.testapp.presentation.activities.MainActivity
 import com.example.testapp.presentation.adapters.EnabledCardsAdapter
-import com.example.testapp.presentation.screens.menu_settings.MenuSettingsViewModel
+import com.example.testapp.presentation.viewmodels.MenuSettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -40,8 +39,6 @@ class MenuSettingsFragment : Fragment() {
     }
 
     private fun setMenuItems(visible: Boolean) {
-        Log.d("MyTag", "menu: setMenuItems $visible")
-
         val textButton = menu.findItem(R.id.text_button)
         textButton.isVisible = visible
         if (visible) {

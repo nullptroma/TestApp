@@ -1,4 +1,4 @@
-package com.example.testapp.presentation.screens.menu_settings
+package com.example.testapp.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -6,6 +6,7 @@ import com.example.testapp.domain.CardType
 import com.example.testapp.domain.models.cardsettings.EnabledCard
 import com.example.testapp.domain.usecases.GetFlowEnabledCardsUseCase
 import com.example.testapp.domain.usecases.SetEnabledCardsUseCase
+import com.example.testapp.presentation.states.screens.MenuSettingsScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

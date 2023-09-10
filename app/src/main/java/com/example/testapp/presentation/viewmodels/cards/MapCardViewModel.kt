@@ -1,9 +1,7 @@
-package com.example.testapp.presentation.cards.map
+package com.example.testapp.presentation.viewmodels.cards
 
 import android.app.Activity
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -12,32 +10,30 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.testapp.di.ViewModelFactoryProvider
 import com.example.testapp.domain.models.CityInfo
 import com.example.testapp.domain.models.cardsettings.MapSettings
-import com.example.testapp.domain.usecases.get_settings.UseCardSettingsUseCase
-import com.example.testapp.presentation.cards.CardViewModel
 import com.example.testapp.domain.models.settings.CitySettingBridge
 import com.example.testapp.domain.models.settings.SettingBridge
+import com.example.testapp.domain.usecases.get_settings.UseCardSettingsUseCase
+import com.example.testapp.presentation.cards.CardViewModel
+import com.example.testapp.presentation.states.cards.MapCardState
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.EntryPointAccessors
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class MapCardViewModel @AssistedInject constructor(
     private val _useMapSettingsUseCase: UseCardSettingsUseCase<MapSettings>,
     @Assisted id: Long
 ) : CardViewModel() {
-
-    override val isSet: State<Boolean>
-        get() = _isSet
-    private val _isSet = mutableStateOf(false)
-
     override val id: Long
         get() = _id
     private var _id:Long
 
-    val state: State<MapCardState>
+    override val state: StateFlow<MapCardState>
         get() = _state
-    private val _state = mutableStateOf(MapCardState())
+    private val _state = MutableStateFlow(MapCardState())
     private var _setting : MapSettings = MapSettings()
 
     init {
@@ -53,7 +49,7 @@ class MapCardViewModel @AssistedInject constructor(
         viewModelScope.launch {
             _setting = _useMapSettingsUseCase.read(_id).copy()
             refreshFromSetting()
-            _isSet.value = _setting.cityInfo.name.isNotEmpty()
+            //_isSet.value = _setting.cityInfo.name.isNotEmpty()
         }
     }
 

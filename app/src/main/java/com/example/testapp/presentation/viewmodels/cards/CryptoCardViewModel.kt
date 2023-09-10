@@ -1,27 +1,27 @@
-package com.example.testapp.presentation.cards.crypto
+package com.example.testapp.presentation.viewmodels.cards
 
 import android.app.Activity
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.testapp.MyObserver
 import com.example.testapp.di.ViewModelFactoryProvider
 import com.example.testapp.domain.models.CryptosPackage
 import com.example.testapp.domain.models.cardsettings.CryptoSettings
+import com.example.testapp.domain.models.settings.CryptosSettingBridge
+import com.example.testapp.domain.models.settings.SettingBridge
 import com.example.testapp.domain.usecases.cardsdata.GetLiveCryptoPackageUseCase
 import com.example.testapp.domain.usecases.get_settings.UseCardSettingsUseCase
 import com.example.testapp.presentation.cards.CardViewModel
-import com.example.testapp.domain.models.settings.CryptosSettingBridge
-import com.example.testapp.domain.models.settings.SettingBridge
+import com.example.testapp.presentation.states.cards.CryptoCardState
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.EntryPointAccessors
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class CryptoCardViewModel @AssistedInject constructor(
@@ -32,25 +32,17 @@ class CryptoCardViewModel @AssistedInject constructor(
 
     override val id: Long
         get() = _id
-    override val isSet: State<Boolean>
-        get() = _isSet
-    private val _isSet = mutableStateOf(false)
 
     private var _id: Long
 
-    val state: State<CryptoCardState>
+    override val state: StateFlow<CryptoCardState>
         get() = _state
-    private val _state = mutableStateOf(CryptoCardState())
+    private val _state = MutableStateFlow(CryptoCardState())
     private var _setting: CryptoSettings = CryptoSettings()
     private var _cryptosInfo: CryptosPackage? = null
-    private val _observer: MyObserver<CryptosPackage> = MyObserver { pack ->
-        _cryptosInfo = pack
-        refreshState()
-    }
 
     init {
         _id = id
-        _getLiveCryptoPackageUseCase.liveData.observeForever(_observer)
         loadSetting()
     }
 
@@ -68,7 +60,7 @@ class CryptoCardViewModel @AssistedInject constructor(
         viewModelScope.launch {
             _setting = useCryptoSettingsUseCase.read(_id).copy()
             refreshState()
-            _isSet.value = _setting.cryptoIdList.isNotEmpty()
+            //_isSet.value = _setting.cryptoIdList.isNotEmpty()
         }
     }
 
@@ -105,11 +97,6 @@ class CryptoCardViewModel @AssistedInject constructor(
                 return assistedFactory.create(id) as T
             }
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        _getLiveCryptoPackageUseCase.liveData.removeObserver(_observer)
     }
 }
 

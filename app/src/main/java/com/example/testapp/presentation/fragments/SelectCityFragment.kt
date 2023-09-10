@@ -15,7 +15,7 @@ import com.example.testapp.R
 import com.example.testapp.databinding.FragmentSelectCityBinding
 import com.example.testapp.presentation.activities.MainActivity
 import com.example.testapp.presentation.adapters.CitiesAdapter
-import com.example.testapp.presentation.screens.select_city.SelectCityViewModel
+import com.example.testapp.presentation.viewmodels.SelectCityViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

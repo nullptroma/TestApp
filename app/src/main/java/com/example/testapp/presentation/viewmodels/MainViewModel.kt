@@ -1,8 +1,9 @@
-package com.example.testapp.presentation.screens.main
+package com.example.testapp.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.testapp.domain.usecases.GetFlowEnabledCardsUseCase
+import com.example.testapp.presentation.states.screens.MainScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
