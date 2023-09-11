@@ -1,8 +1,6 @@
 package com.example.testapp.presentation.fragments
 
-import android.app.Activity
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,22 +13,17 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testapp.R
 import com.example.testapp.databinding.FragmentMainBinding
-import com.example.testapp.di.ViewModelFactoryProvider
+import com.example.testapp.domain.models.cardsettings.CardSettings
+import com.example.testapp.domain.usecases.cards.UseCardUseCase
 import com.example.testapp.presentation.activities.MainActivity
-import com.example.testapp.presentation.cards.CardViewModel
-import com.example.testapp.presentation.viewmodels.cards.WeatherCardViewModel
 import com.example.testapp.presentation.viewmodels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 
 @AndroidEntryPoint
 class MainFragment : Fragment() {
-    @Inject
-    lateinit var weatherViewModelFactory: WeatherCardViewModel.Factory
     private val _viewModel: MainViewModel by viewModels()
     private var _binding: FragmentMainBinding? = null
     private val menu
@@ -67,34 +60,18 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.cardsRecyclerview.layoutManager = LinearLayoutManager(requireContext())
 
-        val vmStore = this.viewModelStore
-        val cardViewModels = MutableStateFlow(listOf<CardViewModel>())
+        val useCardsUseCase = MutableStateFlow(listOf<UseCardUseCase<CardSettings>>())
 
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.CREATED) {
                 launch {
-                    _viewModel.state.collect { uiState ->
-                        cardViewModels.value = uiState.cards.map {
-                            var vm = vmStore[it.id.toString()]
-                            if(vm != null)
-                                return@map vm as WeatherCardViewModel
-                            val factory = EntryPointAccessors.fromActivity(
-                                this@MainFragment.activity as Activity, ViewModelFactoryProvider::class.java
-                            ).weatherCardViewModelFactory()
-                            vm = factory.create(it.id)
-                            vmStore.put(it.id.toString(), vm)
-                            return@map vm
-                        }
-                        Log.d("MyTag", "Vms size: ${cardViewModels.value.size}, ids: ${uiState.cards.map { it.id }}")
+                    _viewModel.state.collect {
+
                     }
                 }
                 launch {
-                    cardViewModels.collect {
-                        Log.d("MyTag", "Vms: ${
-                            it.map { vm ->
-                                "${vm.state.value.type},${vm.id}"
-                            }
-                        }")
+                    useCardsUseCase.collect {
+
                     }
                 }
             }

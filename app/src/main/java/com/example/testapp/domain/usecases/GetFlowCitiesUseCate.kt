@@ -5,7 +5,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class GetLiveCitiesUseCate @Inject constructor(
+class GetFlowCitiesUseCate @Inject constructor(
     repo: CitiesRepository
 ) {
     val flowData = repo.getAll()

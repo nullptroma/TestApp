@@ -6,15 +6,19 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.testapp.data.local.model.DbCryptoSetting
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CryptoDao {
-    @Query("SELECT * FROM settings_for_cryptos WHERE card_id = :id")
-    fun getById(id: Long): DbCryptoSetting?
+    @Query("SELECT * FROM settings_for_cryptos")
+    fun getAll(): List<DbCryptoSetting>
+
+    @Query("SELECT * FROM settings_for_cryptos")
+    fun getFlow(): Flow<List<DbCryptoSetting>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun add(setting: DbCryptoSetting)
+    fun add(settings: List<DbCryptoSetting>)
 
     @Update
-    fun update(setting: DbCryptoSetting)
+    fun update(settings: List<DbCryptoSetting>)
 }

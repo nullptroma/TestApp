@@ -7,18 +7,19 @@ import androidx.room.Query
 import androidx.room.Update
 import com.example.testapp.data.local.model.DbFullMap
 import com.example.testapp.data.local.model.DbMapSetting
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MapDao {
-    @Query("SELECT * FROM settings_for_maps WHERE card_id = :id")
-    fun getById(id: Long): DbMapSetting?
+    @Query("SELECT * FROM settings_for_maps")
+    fun getAll(): List<DbMapSetting>
 
-    @Query("SELECT * FROM settings_for_maps WHERE card_id = :id")
-    fun getFull(id:Long): DbFullMap?
+    @Query("SELECT * FROM settings_for_maps")
+    fun getFlow(): Flow<List<DbFullMap>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun add(setting: DbMapSetting)
+    fun add(settings: List<DbMapSetting>)
 
     @Update
-    fun update(setting: DbMapSetting)
+    fun update(settings: List<DbMapSetting>)
 }

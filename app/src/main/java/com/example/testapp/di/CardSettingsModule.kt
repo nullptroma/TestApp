@@ -1,8 +1,8 @@
 package com.example.testapp.di
 
-import com.example.testapp.data.local.repositories.CryptoSettingsRepository
-import com.example.testapp.data.local.repositories.MapSettingsRepository
-import com.example.testapp.data.local.repositories.WeatherSettingsRepository
+import com.example.testapp.data.local.repositories.cardsettings.CryptoSettingsRepository
+import com.example.testapp.data.local.repositories.cardsettings.MapSettingsRepository
+import com.example.testapp.data.local.repositories.cardsettings.WeatherSettingsRepository
 import com.example.testapp.domain.models.cardsettings.CryptoSettings
 import com.example.testapp.domain.models.cardsettings.MapSettings
 import com.example.testapp.domain.models.cardsettings.WeatherSettings
@@ -19,19 +19,19 @@ import javax.inject.Singleton
 object CardSettingsModule {
     @Provides
     @Singleton
-    fun provideCryptoSettings(repo:CryptoSettingsRepository): UseCardSettingsUseCase<CryptoSettings> {
+    fun provideCryptoSettings(repo: CryptoSettingsRepository): UseCardSettingsUseCase<CryptoSettings> {
         return UseCardSettingsUseCase(repo)
     }
 
     @Provides
     @Singleton
-    fun provideMapSettings(repo:MapSettingsRepository): UseCardSettingsUseCase<MapSettings> {
+    fun provideMapSettings(repo: MapSettingsRepository): UseCardSettingsUseCase<MapSettings> {
         return UseCardSettingsUseCase(repo)
     }
 
     @Provides
     @Singleton
-    fun provideWeatherSettings(repo:WeatherSettingsRepository): UseCardSettingsUseCase<WeatherSettings> {
+    fun provideWeatherSettings(repo: WeatherSettingsRepository): UseCardSettingsUseCase<WeatherSettings> {
         return UseCardSettingsUseCase(repo)
     }
 }

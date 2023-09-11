@@ -13,7 +13,6 @@ class GetFirstValidCryptoPackageUseCase @Inject constructor(private val reposito
 
 
     init {
-
     }
 
     suspend fun get() : CryptosPackage {

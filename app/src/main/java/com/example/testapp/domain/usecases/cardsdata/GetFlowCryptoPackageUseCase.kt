@@ -5,8 +5,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class GetLiveCryptoPackageUseCase @Inject constructor(
+class GetFlowCryptoPackageUseCase @Inject constructor(
     dataRepo: CryptoRepository,
 ) {
-    val liveData = dataRepo.flowData
+    val flowData = dataRepo.flowData
 }
