@@ -3,7 +3,7 @@ package com.example.testapp.data.remote.repositories
 import com.example.testapp.data.remote.api.OpenWeatherApi
 import com.example.testapp.data.remote.model.weather.RemoteWeather
 import com.example.testapp.di.IoDispatcher
-import com.example.testapp.domain.models.Coordinates
+import com.example.testapp.domain.models.city.Coordinates
 import com.example.testapp.domain.models.Weather
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext

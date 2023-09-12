@@ -20,9 +20,11 @@
     <string name="remove_card">Remove card</string>
     <string name="drag_card">Drag card</string>
     <string name="card_type">CardType</string>
+    <string name="select">Выбрать</string>
 
 
     <!-- описание контентов  -->
     <string name="settings_content">Settings</string>
+    <string name="back_content">Back</string>
 
 </resources>

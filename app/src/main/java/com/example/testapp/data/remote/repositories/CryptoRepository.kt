@@ -2,8 +2,8 @@ package com.example.testapp.data.remote.repositories
 
 import com.example.testapp.data.remote.api.CoingeckoApiV3
 import com.example.testapp.di.IoDispatcher
-import com.example.testapp.domain.models.CryptoData
-import com.example.testapp.domain.models.CryptosPackage
+import com.example.testapp.domain.models.crypto.CryptoData
+import com.example.testapp.domain.models.crypto.CryptosPackage
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay

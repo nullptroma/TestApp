@@ -4,7 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.testapp.domain.models.CryptoData
+import com.example.testapp.domain.models.crypto.CryptoData
 import com.example.testapp.domain.usecases.GetFirstValidCryptoPackageUseCase
 import com.example.testapp.domain.models.settings.CryptosSettingBridge
 import com.example.testapp.presentation.states.screens.SelectCryptosScreenState

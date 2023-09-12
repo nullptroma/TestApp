@@ -1,6 +1,6 @@
 package com.example.testapp.domain.models.settings
 
-import com.example.testapp.domain.models.CityInfo
+import com.example.testapp.domain.models.city.CityInfo
 
 class CitySettingBridge constructor(
     var city: CityInfo = CityInfo(),

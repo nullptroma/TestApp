@@ -2,7 +2,7 @@ package com.example.testapp.presentation.viewholders
 
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testapp.databinding.CityItemBinding
-import com.example.testapp.domain.models.CityInfo
+import com.example.testapp.domain.models.city.CityInfo
 
 class CityViewHolder(private val _binding: CityItemBinding) : RecyclerView.ViewHolder(_binding.root) {
     var callback : ((CityInfo) -> Unit)? = null

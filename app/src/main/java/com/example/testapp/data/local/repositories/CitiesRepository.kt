@@ -1,7 +1,7 @@
 package com.example.testapp.data.local.repositories
 
 import com.example.testapp.data.local.dao.CitiesDao
-import com.example.testapp.domain.models.CityInfo
+import com.example.testapp.domain.models.city.CityInfo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testapp.databinding.CityItemBinding
-import com.example.testapp.domain.models.CityInfo
+import com.example.testapp.domain.models.city.CityInfo
 import com.example.testapp.presentation.viewholders.CityViewHolder
 
 class CitiesAdapter(private val _cityList: List<CityInfo>) : RecyclerView.Adapter<CityViewHolder>() {

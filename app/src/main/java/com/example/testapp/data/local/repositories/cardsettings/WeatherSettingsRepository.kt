@@ -4,7 +4,7 @@ import com.example.testapp.data.local.dao.WeatherDao
 import com.example.testapp.data.local.model.DbFullWeather
 import com.example.testapp.data.local.model.DbWeatherSetting
 import com.example.testapp.di.IoDispatcher
-import com.example.testapp.domain.models.CityInfo
+import com.example.testapp.domain.models.city.CityInfo
 import com.example.testapp.domain.models.cardsettings.WeatherSettings
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow

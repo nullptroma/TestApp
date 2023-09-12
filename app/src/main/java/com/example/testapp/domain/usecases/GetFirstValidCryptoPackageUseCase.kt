@@ -1,14 +1,14 @@
 package com.example.testapp.domain.usecases
 
 import com.example.testapp.data.remote.repositories.CryptoRepository
-import com.example.testapp.domain.models.CryptosPackage
+import com.example.testapp.domain.models.crypto.CryptosPackage
 import kotlinx.coroutines.delay
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class GetFirstValidCryptoPackageUseCase @Inject constructor(private val repository: CryptoRepository){
-    private lateinit var _package:CryptosPackage
+    private lateinit var _package: CryptosPackage
     private var _initialized = false
 
 

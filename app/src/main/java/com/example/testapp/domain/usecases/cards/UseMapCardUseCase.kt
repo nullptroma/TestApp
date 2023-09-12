@@ -1,14 +1,12 @@
 package com.example.testapp.domain.usecases.cards
 
-import android.util.Log
-import com.example.testapp.di.IoDispatcher
-import com.example.testapp.domain.models.CityInfo
+import com.example.testapp.domain.models.cards.MapCardState
+import com.example.testapp.domain.models.cards_callbacks.ICardCallback
 import com.example.testapp.domain.models.cardsettings.MapSettings
+import com.example.testapp.domain.models.city.CityInfo
 import com.example.testapp.domain.models.settings.CitySettingBridge
 import com.example.testapp.domain.models.settings.SettingBridge
 import com.example.testapp.domain.usecases.get_settings.UseCardSettingsUseCase
-import com.example.testapp.presentation.states.cards.MapCardState
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
@@ -17,37 +15,34 @@ import javax.inject.Singleton
 @Singleton
 class UseMapCardUseCase @Inject constructor(
     useMapSettingsUseCase: UseCardSettingsUseCase<MapSettings>,
-    @IoDispatcher private val _ioDispatcher : CoroutineDispatcher
-) : UseCardUseCase<MapSettings>(useMapSettingsUseCase, _ioDispatcher) {
+) : UseCardUseCase<MapSettings>(useMapSettingsUseCase) {
+    override val callbackContainer: ICardCallback? = null
     override val state: StateFlow<Map<Long, MapCardState>>
         get() = _state
     private val _state = MutableStateFlow(mapOf<Long, MapCardState>())
 
-    init {
-        loadSetting()
+    private fun refreshState() {
+        val map = mutableMapOf<Long, MapCardState>()
+        for(pair in settings)
+            map[pair.key] = MapCardState(pair.key, pair.value.cityInfo.coordinates, needSettings = pair.value.cityInfo.name.isEmpty())
+        _state.value = map
     }
 
-    private fun refreshFromSetting() {
-    }
-
-    private fun loadSetting() {
-
-    }
-
-    private fun saveSetting() {
-    }
-
-    private fun setCity(city: CityInfo) {
+    private fun setCity(id: Long, city: CityInfo) {
+        if (!settings.containsKey(id))
+            return
+        updateSettingForCard(id, settings[id]!!.copy(cityInfo = city))
     }
 
     override fun createSettingBridge(id:Long): SettingBridge {
         return CitySettingBridge { city ->
-            setCity(city)
+            setCity(id, city)
         }
     }
 
-    override fun onSettingsChange() {
-        Log.d("MyTag", "Map sets: ${settings.map { it.key }}")
+    override suspend fun onSettingsChange() {
+        //Log.d("MyTag", "Map sets: ${settings.map { it.key }}")
+        refreshState()
     }
 }
 

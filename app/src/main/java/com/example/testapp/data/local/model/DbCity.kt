@@ -2,8 +2,8 @@ package com.example.testapp.data.local.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.testapp.domain.models.CityInfo
-import com.example.testapp.domain.models.Coordinates
+import com.example.testapp.domain.models.city.CityInfo
+import com.example.testapp.domain.models.city.Coordinates
 
 @Entity(tableName = "cities")
 data class DbCity(

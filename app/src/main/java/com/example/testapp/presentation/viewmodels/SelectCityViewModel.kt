@@ -1,7 +1,7 @@
 package com.example.testapp.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
-import com.example.testapp.domain.models.CityInfo
+import com.example.testapp.domain.models.city.CityInfo
 import com.example.testapp.domain.models.settings.CitySettingBridge
 import com.example.testapp.domain.models.settings.SettingBridgeContainer
 import com.example.testapp.domain.usecases.GetFlowCitiesUseCate

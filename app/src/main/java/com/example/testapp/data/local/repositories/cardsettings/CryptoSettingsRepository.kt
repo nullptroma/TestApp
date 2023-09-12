@@ -15,11 +15,12 @@ import javax.inject.Singleton
 
 @Singleton
 class CryptoSettingsRepository @Inject constructor(
-    private val dao: CryptoDao, @IoDispatcher private val _ioDispatcher: CoroutineDispatcher
+    private val _dao: CryptoDao,
+    @IoDispatcher private val _ioDispatcher: CoroutineDispatcher
 ) : CardSettingsRepository<CryptoSettings> {
     override suspend fun checkIds(ids: List<Long>) {
         withContext(_ioDispatcher) {
-            val cur = dao.getAll().map { it.cardId }.toSet()
+            val cur = _dao.getAll().map { it.cardId }.toSet()
             val toAdd = mutableListOf<DbCryptoSetting>()
             for (id in ids) if (!cur.contains(id)) toAdd.add(
                 DbCryptoSetting(
@@ -27,17 +28,17 @@ class CryptoSettingsRepository @Inject constructor(
                     Gson().toJson(listOf<String>())
                 )
             )
-            dao.add(toAdd)
+            _dao.add(toAdd)
         }
     }
 
     override suspend fun getForIds(): Flow<Map<Long, CryptoSettings>> {
-        return dao.getFlow().map { it.toCryptoSettingsMap() }
+        return _dao.getFlow().map { it.toCryptoSettingsMap() }
     }
 
     override suspend fun setSettings(settings: Map<Long, CryptoSettings>) {
         withContext(_ioDispatcher) {
-            dao.update(settings.let {
+            _dao.update(settings.let {
                 it.map { pair ->
                     DbCryptoSetting(
                         pair.key, Gson().toJson(pair.value.cryptoIdList)
