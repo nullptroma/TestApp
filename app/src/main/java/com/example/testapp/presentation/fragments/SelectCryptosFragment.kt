@@ -4,30 +4,30 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testapp.R
-import com.example.testapp.databinding.FragmentSelectCityBinding
+import com.example.testapp.databinding.FragmentSelectCryptosBinding
 import com.example.testapp.presentation.activities.MainActivity
-import com.example.testapp.presentation.adapters.CitiesAdapter
-import com.example.testapp.presentation.viewmodels.SelectCityViewModel
+import com.example.testapp.presentation.adapters.CryptosAdapter
+import com.example.testapp.presentation.viewmodels.SelectCryptosViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class SelectCityFragment : Fragment() {
-    private val viewModel: SelectCityViewModel by viewModels()
-    private var _binding: FragmentSelectCityBinding? = null
+class SelectCryptosFragment : Fragment() {
+    private val _viewModel: SelectCryptosViewModel by viewModels()
+    private var _binding: FragmentSelectCryptosBinding? = null
     private val binding get() = _binding!!
     private val menu
         get() = (activity as MainActivity).toolbar.menu
-    private lateinit var adapter: CitiesAdapter
+    private lateinit var _adapter: CryptosAdapter
     private var _filterString = ""
 
     override fun onStart() {
@@ -47,7 +47,7 @@ class SelectCityFragment : Fragment() {
 
                 override fun onQueryTextChange(newText: String?): Boolean {
                     _filterString = newText ?: ""
-                    adapter.filter.filter(newText)
+                    _adapter.filter.filter(newText)
                     return true
                 }
             })
@@ -64,27 +64,28 @@ class SelectCityFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = FragmentSelectCityBinding.inflate(inflater, container, false)
+        _binding = FragmentSelectCryptosBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter = CitiesAdapter()
-        adapter.onClick = {
-            viewModel.selectCity(it)
+        _adapter = CryptosAdapter()
+        _adapter.onChangeSelect = { id ->
+            _viewModel.changeIdSelect(id)
         }
-        binding.citiesRecyclerView.adapter = adapter
+        binding.cryptosRecyclerView.adapter = _adapter
+        binding.cryptosRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        binding.citiesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.CREATED) {
-                viewModel.state.collect { uiState ->
-                    adapter.submit(uiState.cities, _filterString)
-
-                    if (uiState.exit) {
-                        viewModel.restoreExit()
-                        findNavController().navigateUp()
+                _viewModel.state.collect { uiState ->
+                    _adapter.submit(uiState.list, _filterString)
+                    if(uiState.showToast) {
+                        _viewModel.showToast(false)
+                        Toast.makeText(
+                            requireContext(), getText(R.string.toast_msg), Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             }
@@ -94,6 +95,7 @@ class SelectCityFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         setMenuItems(false)
+        _viewModel.save()
     }
 
     override fun onDestroyView() {

@@ -1,7 +1,6 @@
 package com.example.testapp.presentation.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,18 +13,15 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testapp.R
 import com.example.testapp.databinding.FragmentMainBinding
-import com.example.testapp.domain.models.settings.SettingBridgeContainer
 import com.example.testapp.presentation.activities.MainActivity
 import com.example.testapp.presentation.adapters.CardsAdapter
 import com.example.testapp.presentation.viewmodels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 
 @AndroidEntryPoint
 class MainFragment : Fragment() {
-    @Inject lateinit var bridgeContainer: SettingBridgeContainer
 
     private val _viewModel: MainViewModel by viewModels()
     private var _binding: FragmentMainBinding? = null
@@ -45,7 +41,7 @@ class MainFragment : Fragment() {
         if (visible) {
             textButton.title = "Правка"
             textButton.setOnMenuItemClickListener {
-                findNavController().navigate(R.id.action_Menu_to_MenuSettingsFragment)
+                findNavController().navigate(R.id.action_Menu_to_menuSettingsFragment)
                 true
             }
         }
@@ -64,10 +60,9 @@ class MainFragment : Fragment() {
         binding.cardsRecyclerview.layoutManager = LinearLayoutManager(requireContext())
 
         val adapter = CardsAdapter(_viewModel.callbackMap) { id ->
-            val bridge = _viewModel.createSettingBridge(id)
-            bridgeContainer.bridge = bridge
-
-            Log.d("MyTag", "Setting: $id")
+            val actionId = _viewModel.setSettingBridge(id)
+            if(actionId != null)
+                findNavController().navigate(actionId)
         }
         binding.cardsRecyclerview.layoutManager = LinearLayoutManager(requireContext())
         binding.cardsRecyclerview.adapter = adapter
@@ -80,7 +75,6 @@ class MainFragment : Fragment() {
                     }
                 }
             }
-
         }
     }
 

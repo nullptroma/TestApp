@@ -1,6 +1,7 @@
 package com.example.testapp.domain.usecases.cards
 
 import android.util.Log
+import com.example.testapp.domain.models.Weather
 import com.example.testapp.domain.models.cards.WeatherCardState
 import com.example.testapp.domain.models.cards_callbacks.ICardCallback
 import com.example.testapp.domain.models.cards_callbacks.WeatherCallback
@@ -10,8 +11,12 @@ import com.example.testapp.domain.models.settings.CitySettingBridge
 import com.example.testapp.domain.models.settings.SettingBridge
 import com.example.testapp.domain.usecases.cardsdata.GetWeatherUseCase
 import com.example.testapp.domain.usecases.get_settings.UseCardSettingsUseCase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -21,12 +26,11 @@ class UseWeatherCardUseCase @Inject constructor(
     private val _getWeatherUseCase: GetWeatherUseCase,
 ) : UseCardUseCase<WeatherSettings>(useWeatherSettingsUseCase) {
     override val callbackContainer: ICardCallback = WeatherCallback { id ->
-        Log.d("MyTag", "Refreshing $id")
-
-        //CoroutineScope(Dispatchers.Default).launch {
-            //fetchData(id)
-        //}
+        CoroutineScope(Dispatchers.Default).launch {
+            fetchData(id)
+        }
     }
+    private var _lastChangedId: Long = -1;
 
     override val state: StateFlow<Map<Long, WeatherCardState>>
         get() = _state
@@ -40,24 +44,28 @@ class UseWeatherCardUseCase @Inject constructor(
             }
             return
         }
-        val res = _getWeatherUseCase.get(set.cityInfo.coordinates)
+        _state.value = _state.value.toMutableMap().apply {
+            this[id] = WeatherCardState(id, null, needSettings = false)
+        }
+        var res: Weather? = null
+        while (res == null) {
+            res = _getWeatherUseCase.get(set.cityInfo.coordinates)
+            if (res == null)
+                delay(1000)
+            Log.d("MyTag", "Try!")
+        }
+        Log.d("MyTag", "KUKU!")
         _state.value = _state.value.toMutableMap().apply {
             this[id] = WeatherCardState(id, res)
         }
     }
 
     private suspend fun fetchAll() {
-        val map = mutableMapOf<Long, WeatherCardState>()
         for (set in settings) {
-            val id = set.key
-            if (set.value.cityInfo.name.isEmpty()) {
-                map[id] = WeatherCardState(id, null, needSettings = true)
-                continue
+            CoroutineScope(Dispatchers.Default).launch {
+                fetchData(set.key)
             }
-            val res = _getWeatherUseCase.get(set.value.cityInfo.coordinates)
-            map[set.key] = WeatherCardState(id, res)
         }
-        _state.value = map
     }
 
     private fun setCity(id: Long, city: CityInfo) {
@@ -68,24 +76,31 @@ class UseWeatherCardUseCase @Inject constructor(
 
     override fun createSettingBridge(id: Long): SettingBridge {
         return CitySettingBridge { city ->
+            _lastChangedId = id
             setCity(id, city)
         }
     }
 
     override suspend fun onSettingsChange() {
-        //Log.d("MyTag", "Weather sets: ${settings.map { it.key }}")
-        checkEntries()
-        fetchAll()
+        if (_lastChangedId == -1L) {
+            checkEntries()
+            fetchAll()
+        } else {
+            _lastChangedId = -1L
+            fetchData(_lastChangedId)
+        }
     }
 
     private fun checkEntries() {
         val add = settings.filter { pair -> !state.value.containsKey(pair.key) }
         _state.value = _state.value.toMutableMap().apply {
-            this+=add.map { it.key to  WeatherCardState(
-                it.key,
-                null,
-                needSettings = it.value.cityInfo.name.isEmpty()
-            )}
+            this += add.map {
+                it.key to WeatherCardState(
+                    it.key,
+                    null,
+                    needSettings = it.value.cityInfo.name.isEmpty()
+                )
+            }
         }.filter { pair -> settings.containsKey(pair.key) }
     }
 }

@@ -6,6 +6,7 @@ import com.example.testapp.domain.models.crypto.CryptoData
 data class CryptoCardState(
     override val id: Long,
     val info: List<CryptoData> = listOf(),
+    val loading: Boolean = false,
     val error: Boolean = false,
     override val needSettings: Boolean = false
 ) : CardState() {

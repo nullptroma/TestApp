@@ -7,7 +7,9 @@ import com.example.testapp.domain.models.UseCardsContainer
 import com.example.testapp.domain.models.cards.CardState
 import com.example.testapp.domain.models.cards_callbacks.ICardCallback
 import com.example.testapp.domain.models.settings.SettingBridge
+import com.example.testapp.domain.models.settings.SettingBridgeContainer
 import com.example.testapp.domain.usecases.GetFlowEnabledCardsUseCase
+import com.example.testapp.presentation.SettingsTable
 import com.example.testapp.presentation.states.screens.MainScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -22,7 +24,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    getFlowEnabledCardsUseCase: GetFlowEnabledCardsUseCase, useCards: UseCardsContainer
+    getFlowEnabledCardsUseCase: GetFlowEnabledCardsUseCase,
+    useCards: UseCardsContainer,
+    private val _bridgeContainer: SettingBridgeContainer
 ) : ViewModel() {
     val callbackMap: Map<CardType, ICardCallback?>
     val state: StateFlow<MainScreenState>
@@ -60,8 +64,10 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun createSettingBridge(id: Long): SettingBridge? {
-        return _settingBridgeFactoryMap[_cardStates[id]?.type]?.invoke(id)
+    fun setSettingBridge(id: Long):Int? {
+        val type = _cardStates[id]?.type
+        _bridgeContainer.bridge = _settingBridgeFactoryMap[type]?.invoke(id)
+        return SettingsTable.table[type]
     }
 
     private fun refresh() {

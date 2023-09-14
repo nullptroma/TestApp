@@ -41,7 +41,6 @@ class UseMapCardUseCase @Inject constructor(
     }
 
     override suspend fun onSettingsChange() {
-        //Log.d("MyTag", "Map sets: ${settings.map { it.key }}")
         refreshState()
     }
 }

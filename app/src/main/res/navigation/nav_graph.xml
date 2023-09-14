@@ -11,11 +11,14 @@
         android:label="@string/menu_fragment_label"
         tools:layout="@layout/fragment_main">
         <action
-            android:id="@+id/action_Menu_to_SelectCityFragment"
+            android:id="@+id/action_Menu_to_selectCityFragment"
             app:destination="@id/SelectCityFragment" />
         <action
-            android:id="@+id/action_Menu_to_MenuSettingsFragment"
+            android:id="@+id/action_Menu_to_menuSettingsFragment"
             app:destination="@id/menuSettingsFragment" />
+        <action
+            android:id="@+id/action_Menu_to_selectCryptosFragment"
+            app:destination="@id/selectCryptosFragment" />
     </fragment>
     <fragment
         android:id="@+id/SelectCityFragment"
@@ -27,4 +30,9 @@
         android:name="com.example.testapp.presentation.fragments.MenuSettingsFragment"
         android:label="@string/menu_settings_fragment_label"
         tools:layout="@layout/fragment_menu_settings" />
+    <fragment
+        android:id="@+id/selectCryptosFragment"
+        android:name="com.example.testapp.presentation.fragments.SelectCryptosFragment"
+        android:label="@string/crypto_fragment_label"
+        tools:layout="@layout/fragment_select_cryptos" />
 </navigation>

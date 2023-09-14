@@ -54,9 +54,9 @@ android {
 }
 
 dependencies {
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation 'com.yandex.android:maps.mobile:4.3.1-lite'
-    implementation(project(":reorderable"))
-
+    implementation 'com.github.bumptech.glide:glide:4.16.0'
     //Coil
     implementation("io.coil-kt:coil-compose:2.4.0")
 

@@ -4,27 +4,24 @@
     <!-- Strings used for fragments for navigation -->
     <string name="menu_fragment_label">Главное меню</string>
     <string name="city_fragment_label">Выбор города</string>
+    <string name="crypto_fragment_label">Выбор криптовалют</string>
     <string name="menu_settings_fragment_label">Главное меню</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
-
-    <string name="lorem_ipsum">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
-        volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus
-        dui nec risus. Maecenas non sodales n
-    </string>
+    <string name="select">Выбрать</string>
     <string name="add">Add</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="crypto_name">Имя криптовалюты</string>
+    <string name="crypto_value">100000.00 $</string>
+    <string name="crypto_change">+100000.00 $</string>
+    <string name="toast_msg">Вы можете выбрать не более 3 криптовалют</string>
+    <string name="error">Ошибка загрузки. Повторная попытка...</string>
+    <!-- описание контентов  -->
     <string name="add_card">Add card</string>
     <string name="remove_card">Remove card</string>
     <string name="drag_card">Drag card</string>
     <string name="card_type">CardType</string>
-    <string name="select">Выбрать</string>
-
-
-    <!-- описание контентов  -->
     <string name="settings_content">Settings</string>
     <string name="back_content">Back</string>
+    <string name="crypto_image_content">Icon</string>
 
 </resources>

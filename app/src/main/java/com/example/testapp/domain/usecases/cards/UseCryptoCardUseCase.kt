@@ -24,39 +24,44 @@ class UseCryptoCardUseCase @Inject constructor(
     override val state: StateFlow<Map<Long, CryptoCardState>>
         get() = _state
     private val _state = MutableStateFlow(mapOf<Long, CryptoCardState>())
+    private val _package = getFlowCryptoPackageUseCase.flowData
 
     init {
         CoroutineScope(Dispatchers.Default).launch {
-            getFlowCryptoPackageUseCase.flowData.collect {
-                //Log.d("MyTag", "Cryptos pakage: ${it.data.size}, ${it.loading}")
+            _package.collect {
+                refreshState()
             }
         }
     }
 
-    private fun setCryptos(id:Long, list: List<String>) {
+    private fun refreshState() {
+        val map = mutableMapOf<Long, CryptoCardState>()
+        for (set in settings) {
+            val list = _package.value.data.filter { set.value.cryptoIdList.contains(it.id) }
+            map[set.key] = CryptoCardState(
+                id = set.key,
+                info = list,
+                error = _package.value.error,
+                loading = _package.value.loading,
+                needSettings = set.value.cryptoIdList.isEmpty()
+            )
+        }
+        _state.value = map
+    }
+
+    private fun setCryptos(id: Long, list: List<String>) {
         if (!settings.containsKey(id))
             return
         updateSettingForCard(id, settings[id]!!.copy(cryptoIdList = list))
     }
 
-    override fun createSettingBridge(id:Long): SettingBridge {
+    override fun createSettingBridge(id: Long): SettingBridge {
         return CryptosSettingBridge(settings[id]!!.cryptoIdList.toMutableList()) { list ->
             setCryptos(id, list)
         }
     }
 
     override suspend fun onSettingsChange() {
-        //Log.d("MyTag", "Crypto sets: ${settings.map { it.key }}")
-        checkEntries()
-    }
-
-    private fun checkEntries() {
-        val add = settings.filter { pair -> !state.value.containsKey(pair.key) }
-        _state.value = _state.value.toMutableMap().apply {
-            this+=add.map { it.key to  CryptoCardState(
-                it.key,
-                needSettings = it.value.cryptoIdList.isEmpty()
-            )}
-        }.filter { pair -> settings.containsKey(pair.key) }
+        refreshState()
     }
 }

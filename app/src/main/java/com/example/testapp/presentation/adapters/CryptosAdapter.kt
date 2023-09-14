@@ -7,49 +7,48 @@ import android.widget.Filterable
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.testapp.databinding.CityItemBinding
-import com.example.testapp.domain.models.city.CityInfo
-import com.example.testapp.presentation.viewholders.CityViewHolder
+import com.example.testapp.databinding.CryptoItemBinding
+import com.example.testapp.presentation.states.recycler_view.CryptoItemData
+import com.example.testapp.presentation.viewholders.CryptoViewHolder
 
 
-class CitiesAdapter : RecyclerView.Adapter<CityViewHolder>(), Filterable {
-    var onClick: ((CityInfo) -> Unit)? = null
-    private val list = AsyncListDiffer(this, object : DiffUtil.ItemCallback<CityInfo>() {
+class CryptosAdapter : RecyclerView.Adapter<CryptoViewHolder>(), Filterable {
+    var onChangeSelect: (String) -> Unit = { }
+
+    private val list = AsyncListDiffer(this, object : DiffUtil.ItemCallback<CryptoItemData>() {
         override fun areItemsTheSame(
-            oldItem: CityInfo, newItem: CityInfo
+            oldItem: CryptoItemData, newItem: CryptoItemData
         ): Boolean {
             return oldItem == newItem
         }
 
         override fun areContentsTheSame(
-            oldItem: CityInfo, newItem: CityInfo
+            oldItem: CryptoItemData, newItem: CryptoItemData
         ): Boolean {
             return oldItem == newItem
         }
     })
-    private var fullList = listOf<CityInfo>()
+    private var fullList = listOf<CryptoItemData>()
 
-    fun submit(newList : List<CityInfo>, filter: String = "") {
+    fun submit(newList : List<CryptoItemData>, filter: String = "") {
         fullList = newList.toList()
         getFilter().filter(filter)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CityViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CryptoViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = CityItemBinding.inflate(inflater, parent, false)
+        val binding = CryptoItemBinding.inflate(inflater, parent, false)
 
-        return CityViewHolder(binding)
+        return CryptoViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
         return list.currentList.size
     }
 
-    override fun onBindViewHolder(holder: CityViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CryptoViewHolder, position: Int) {
         holder.bind(list.currentList[position])
-        holder.callback = {
-            onClick?.invoke(it)
-        }
+        holder.onChangeSelect = onChangeSelect
     }
 
     override fun getFilter(): Filter {
@@ -65,7 +64,7 @@ class CitiesAdapter : RecyclerView.Adapter<CityViewHolder>(), Filterable {
 
             @Suppress("UNCHECKED_CAST")
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                list.submitList(results?.values as List<CityInfo>)
+                list.submitList(results?.values as List<CryptoItemData>)
             }
         }
     }
