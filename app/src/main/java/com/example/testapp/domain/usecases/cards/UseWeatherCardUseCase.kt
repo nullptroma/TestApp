@@ -1,6 +1,5 @@
 package com.example.testapp.domain.usecases.cards
 
-import android.util.Log
 import com.example.testapp.domain.models.Weather
 import com.example.testapp.domain.models.cards.WeatherCardState
 import com.example.testapp.domain.models.cards_callbacks.ICardCallback
@@ -30,7 +29,6 @@ class UseWeatherCardUseCase @Inject constructor(
             fetchData(id)
         }
     }
-    private var _lastChangedId: Long = -1;
 
     override val state: StateFlow<Map<Long, WeatherCardState>>
         get() = _state
@@ -52,9 +50,7 @@ class UseWeatherCardUseCase @Inject constructor(
             res = _getWeatherUseCase.get(set.cityInfo.coordinates)
             if (res == null)
                 delay(1000)
-            Log.d("MyTag", "Try!")
         }
-        Log.d("MyTag", "KUKU!")
         _state.value = _state.value.toMutableMap().apply {
             this[id] = WeatherCardState(id, res)
         }
@@ -76,19 +72,17 @@ class UseWeatherCardUseCase @Inject constructor(
 
     override fun createSettingBridge(id: Long): SettingBridge {
         return CitySettingBridge { city ->
-            _lastChangedId = id
             setCity(id, city)
         }
     }
 
     override suspend fun onSettingsChange() {
-        if (_lastChangedId == -1L) {
-            checkEntries()
-            fetchAll()
-        } else {
-            _lastChangedId = -1L
-            fetchData(_lastChangedId)
-        }
+        checkEntries()
+        fetchAll()
+    }
+
+    override suspend fun onSettingsChange(id:Long) {
+        fetchData(id)
     }
 
     private fun checkEntries() {

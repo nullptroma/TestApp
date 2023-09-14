@@ -64,4 +64,8 @@ class UseCryptoCardUseCase @Inject constructor(
     override suspend fun onSettingsChange() {
         refreshState()
     }
+
+    override suspend fun onSettingsChange(id:Long) {
+        refreshState()
+    }
 }

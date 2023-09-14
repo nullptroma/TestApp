@@ -1,5 +1,6 @@
 package com.example.testapp.domain.usecases.cards
 
+import android.util.Log
 import com.example.testapp.domain.models.cards.CardState
 import com.example.testapp.domain.models.cards_callbacks.ICardCallback
 import com.example.testapp.domain.models.cardsettings.CardSettings
@@ -16,12 +17,21 @@ abstract class UseCardUseCase<T : CardSettings>(
     abstract val callbackContainer: ICardCallback?
     abstract val state: StateFlow<Map<Long, CardState>>
     protected var settings: Map<Long, T> = mapOf()
+    private var _lastChangedId: Long = -1L
+
 
     init {
         CoroutineScope(Dispatchers.Default).launch {
             _useCardSettingsUseCase.getFlow().collect {
                 settings = it
-                onSettingsChange()
+                Log.d("MyTag", "Settings: $_lastChangedId")
+                if (_lastChangedId == -1L) {
+                    onSettingsChange()
+                } else {
+                    val id = _lastChangedId
+                    _lastChangedId = -1L
+                    onSettingsChange(id)
+                }
             }
         }
     }
@@ -30,10 +40,12 @@ abstract class UseCardUseCase<T : CardSettings>(
         if (!this.settings.containsKey(id))
             return
         CoroutineScope(Dispatchers.Default).launch {
+            _lastChangedId = id
             _useCardSettingsUseCase.updateSetting(mapOf(Pair(id, settings)))
         }
     }
 
     abstract fun createSettingBridge(id: Long): SettingBridge
     protected abstract suspend fun onSettingsChange()
+    protected abstract suspend fun onSettingsChange(id: Long)
 }
